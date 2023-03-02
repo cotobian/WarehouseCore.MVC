@@ -1,17 +1,25 @@
-﻿
+﻿@model WarehouseCore.MVC.ViewModels.UserVm
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>AddOrEdit</title>
-</head>
-<body>
-    <div> 
+@using (Html.BeginForm("AddOrEdit", "User", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-group">
+        <label class="control-label">Tên đầy đủ</label>
+        @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control" } })
     </div>
-</body>
-</html>
+    <div class="form-group">
+        <label class="control-label">Tên tài khoản</label>
+        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="form-group">
+        <label class="control-label">Chức danh</label>
+        @Html.EditorFor(model => model.RoleName, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Cập nhật" class="btn btn-primary" />
+        <input type="reset" value="Reset" class="btn btn-warning" />
+    </div>
+}

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WarehouseCore.MVC.Models;
@@ -15,10 +17,17 @@ namespace WarehouseCore.MVC.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult AddOrEdit()
+        public async Task<JsonResult> GetRole()
         {
-            return View();
+            List<Role> role = await db.Roles.ToListAsync();
+            return Json(new { data = role }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> AddOrEdit(int id = 0)
+        {
+            if (id == 0) return View(new Role());
+            else return View(await db.Roles.Where(c => c.Id == id).FirstOrDefaultAsync());
         }
 
     }

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
+using WarehouseCore.MVC.Helpers;
 using WarehouseCore.MVC.Models;
 using WarehouseCore.MVC.ViewModels;
 
@@ -11,6 +11,7 @@ namespace WarehouseCore.MVC.Controllers
     public class AccountController : Controller
     {
         private readonly WarehouseEntities db = new WarehouseEntities();
+        private readonly TextHelper textHelper = new TextHelper();
 
         [AllowAnonymous]
         public ActionResult Login(string ReturnUrl = "")
@@ -21,9 +22,9 @@ namespace WarehouseCore.MVC.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(LoginViewModel model)
+        public ActionResult Login(LoginVm model)
         {
-            User user = db.Users.Where(c => c.Username == model.Username && c.Password == GetHashString(model.Password)).FirstOrDefault();
+            User user = db.Users.Where(c => c.Username == model.Username && c.Password == textHelper.GetHashString(model.Password)).FirstOrDefault();
             if(user != null)
             {
                 Session.Add("Name", user.FullName);
@@ -48,18 +49,22 @@ namespace WarehouseCore.MVC.Controllers
             return RedirectToAction("Login", "Account", null);
         }
 
-
-        public static byte[] GetHash(string inputString)
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(ChangePasswordVm model)
         {
-            using (HashAlgorithm algorithm = SHA256.Create())
-                return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
-        }
-
-        public static string GetHashString(string inputString)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (byte b in GetHash(inputString)) sb.Append(b.ToString("X2"));
-            return sb.ToString();
+            User user = db.Users.Where(c => c.Username == model.Username && c.Password == textHelper.GetHashString(model.OldPassword)).FirstOrDefault();
+            if (user != null)
+            {
+                user.Password = textHelper.GetHashString(model.NewPassword);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError("LogOnError", "Tài khoản hoặc mật khẩu không đúng!");
+                return View(model);
+            }
         }
     }
 }

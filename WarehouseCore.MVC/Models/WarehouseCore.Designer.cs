@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\DELL\Source\Repos\WarehouseCore.MVC\WarehouseCore.MVC\Models\WarehouseCore.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Dell\documents\visual studio 2015\Projects\WarehouseCore.MVC\WarehouseCore.MVC\Models\WarehouseCore.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

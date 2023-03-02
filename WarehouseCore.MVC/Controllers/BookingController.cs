@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using WarehouseCore.MVC.Models;
 
@@ -15,10 +15,17 @@ namespace WarehouseCore.MVC.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult AddOrEdit()
+        public async Task<JsonResult> GetBooking()
         {
-            return View();
+            List<Booking> booking = await db.Bookings.ToListAsync();
+            return Json(new { data = booking }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> AddOrEdit(int id = 0)
+        {
+            if (id == 0) return View(new Booking());
+            else return View(await db.Bookings.Where(c => c.Id == id).FirstOrDefaultAsync());
         }
 
     }
