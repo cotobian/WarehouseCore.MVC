@@ -31,7 +31,7 @@ namespace WarehouseCore.MVC.Models
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<POs> POs { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
     }
 }

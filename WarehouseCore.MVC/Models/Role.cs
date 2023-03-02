@@ -16,6 +16,7 @@ namespace WarehouseCore.MVC.Models
     {
         public int Id { get; set; }
         public string RoleName { get; set; }
+        public string ShortName { get; set; }
         public Nullable<int> Status { get; set; }
     }
 }
