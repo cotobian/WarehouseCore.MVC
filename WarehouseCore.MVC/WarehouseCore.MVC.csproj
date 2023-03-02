@@ -45,12 +45,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.3, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.3\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -149,6 +157,14 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="zxing, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.9\lib\net45\zxing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.9\lib\net45\zxing.presentation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -173,6 +189,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BarcodeCreator.cs" />
+    <Compile Include="Helpers\ExcelExport.cs" />
     <Compile Include="Helpers\PdfParser.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Models\Booking.cs">
@@ -217,6 +234,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ChangePasswordVm.cs" />
     <Compile Include="ViewModels\LoginVm.cs" />
+    <Compile Include="ViewModels\ParserVm.cs" />
     <Compile Include="ViewModels\PermissionVm.cs" />
     <Compile Include="ViewModels\POVm.cs" />
     <Compile Include="ViewModels\UserVm.cs" />
@@ -2149,6 +2167,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

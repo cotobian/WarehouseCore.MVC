@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using WarehouseCore.MVC.Models;
 
@@ -29,6 +27,5 @@ namespace WarehouseCore.MVC.Controllers
             if (id == 0) return View(new Role());
             else return View(await db.Roles.Where(c => c.Id == id).FirstOrDefaultAsync());
         }
-
     }
 }

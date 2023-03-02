@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using WarehouseCore.MVC.Models;
 using WarehouseCore.MVC.ViewModels;
@@ -20,7 +18,7 @@ namespace WarehouseCore.MVC.Controllers
         public async Task<JsonResult> GetPO()
         {
             var po = await (from pos in db.POs
-                            join p in db.Bookings on pos.PositionId equals p.Id
+                            join p in db.Positions on pos.PositionId equals p.Id
                             select new { pos, p.PositionName }).ToListAsync();
             List<POVm> povm = po.Select(e => new POVm
             {

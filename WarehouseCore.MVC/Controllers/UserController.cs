@@ -19,8 +19,8 @@ namespace WarehouseCore.MVC.Controllers
         public async Task<JsonResult> GetUser()
         {
             var user = await (from u in db.Users
-                            join r in db.Roles on u.RoleId equals r.Id
-                            select new { u, r.RoleName }).ToListAsync();
+                              join r in db.Roles on u.RoleId equals r.Id
+                              select new { u, r.RoleName }).ToListAsync();
             List<UserVm> uservm = user.Select(e => new UserVm
             {
                 user = e.u,

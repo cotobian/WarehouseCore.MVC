@@ -27,6 +27,5 @@ namespace WarehouseCore.MVC.Controllers
             if (id == 0) return View(new Booking());
             else return View(await db.Bookings.Where(c => c.Id == id).FirstOrDefaultAsync());
         }
-
     }
 }
