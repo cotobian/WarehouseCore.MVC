@@ -18,7 +18,8 @@ namespace WarehouseCore.MVC.Controllers
             base.OnActionExecuting(filterContext);
             if(Session["Role"] == null || string.IsNullOrEmpty(Session["Role"].ToString()))
             {
-                RedirectToAction("Login", "Account", null);
+                filterContext.Result = new RedirectResult("/Account/Login");
+                return;
             }
             int roleid = int.Parse(Session["Role"].ToString());
             List<Function> listcn = (from r in db.Roles

@@ -7,7 +7,7 @@ namespace WarehouseCore.MVC.Helpers
     {
         private byte[] GetHash(string inputString)
         {
-            using (HashAlgorithm algorithm = SHA256.Create())
+            using (HashAlgorithm algorithm = SHA1.Create())
                 return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
         }
 

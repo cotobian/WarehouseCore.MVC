@@ -24,12 +24,13 @@ namespace WarehouseCore.MVC.Controllers
         [HttpPost]
         public ActionResult Login(LoginVm model)
         {
-            User user = db.Users.Where(c => c.Username == model.Username && c.Password == textHelper.GetHashString(model.Password)).FirstOrDefault();
+            string hashPassword = textHelper.GetHashString(model.Password);
+            User user = db.Users.Where(c => c.Username == model.Username && c.Password == hashPassword).FirstOrDefault();
             if(user != null)
             {
                 Session.Add("Name", user.FullName);
                 Session.Add("Id", user.Id);
-                Session.Add("Role", db.Roles.Where(c => c.Id == user.RoleId).FirstOrDefault());
+                Session.Add("Role", user.RoleId);
                 FormsAuthentication.SetAuthCookie(user.FullName, true);
                 string ReturnUrl = Session["ReturnUrl"] as string;
                 if (!string.IsNullOrEmpty(ReturnUrl)) return Redirect(ReturnUrl);
@@ -49,7 +50,14 @@ namespace WarehouseCore.MVC.Controllers
             return RedirectToAction("Login", "Account", null);
         }
 
-        [Authorize]
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> ChangePassword(ChangePasswordVm model)
         {

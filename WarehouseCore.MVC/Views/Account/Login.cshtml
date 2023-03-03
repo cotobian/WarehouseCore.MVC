@@ -1,17 +1,122 @@
-﻿
+﻿@model WarehouseCore.MVC.ViewModels.LoginVm
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
-
 <html>
 <head>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
+    <title>Đăng nhập</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            overflow-x: hidden;
+            font-size: 17px !important;
+        }
+
+        .carousel-panel {
+            padding: 0;
+        }
+
+        .login-panel {
+            height: 100vh;
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+
+        row {
+            border: 0px;
+            margin-right: 0;
+            margin-left: 0;
+            max-width: 100%;
+        }
+
+        .login-wrapper {
+            padding-top: 100px;
+            padding-left: 50px;
+            padding-right: 50px;
+            margin-bottom: 350px;
+        }
+
+        .login-image {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+
+            .login-image img {
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+        .login-title {
+            text-align: center;
+            font-size: x-large;
+            margin-bottom: 20px;
+        }
+
+        input {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .login-pass {
+            margin-bottom: 10px;
+        }
+
+        .login-remember {
+            margin-bottom: 30px;
+        }
+
+        .login-btn {
+            margin-bottom: 350px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .footer {
+            text-align: center;
+        }
+
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 30%;
+            height: 10%;
+        }
+    </style>
 </head>
 <body>
-    <div> 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-0 login-image">
+                <img src="~/Content/Images/panel.jpg" />
+            </div>
+            <div class="col-md-4 col-12 login-panel">
+                <div class="login-wrapper">
+                    <div style="margin-bottom:30px;">
+                        <img src="~/Content/Images/dsv.png" class="center" />
+                    </div>
+                    <form class="form-signin" method="post" action="/Account/Login">
+                        @Html.AntiForgeryToken()
+                        <div style="text-align:center"><h2><b>HỆ THỐNG QUẢN LÝ</b></h2></div>
+                        <div style="text-align:center"><h2><b>DSV LOGISTICS</b></h2></div>
+                        <p>@Html.TextBoxFor(a => a.Username, new { @class = "form-control", placeholder = "Nhập tài khoản" })</p>
+                        <p>@Html.PasswordFor(a => a.Password, new { @class = "form-control", placeholder = "Nhập mật khẩu" })</p>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Đăng nhập</button>
+                        <br />
+                        @Html.ValidationSummary(true)
+                        <a href="/Account/ChangePassword">Đổi mật khẩu</a>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
+
