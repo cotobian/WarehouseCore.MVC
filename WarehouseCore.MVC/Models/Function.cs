@@ -20,6 +20,6 @@ namespace WarehouseCore.MVC.Models
         public Nullable<int> ParentId { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
-        public Nullable<int> Status { get; set; }
+        public int Status { get; set; }
     }
 }

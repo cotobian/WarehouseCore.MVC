@@ -16,7 +16,6 @@
                         <th>Chức năng</th>
                         <th>Url</th>
                         <th>Thứ tự hiển thị</th>
-                        <th>Chức năng cha</th>
                         <th>Icon</th>
                         <th>Sửa</th>
                         <th>Xóa</th>
@@ -41,11 +40,10 @@
                     { "data": "Name" },
                     { "data": "Url" },
                     { "data": "SortOrder" },
-                    { "data": "Parent" },
                     { "data": "Icon" },
                     {
                         "data": "Id", "render": function (data) {
-                            return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "Function")/" + data + "')><i />";
+                            return "<i class='fa fa-pencil f-20 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "Function")/" + data + "')><i />";
                         },
                         "orderable": false,
                         "searchable": false,
@@ -74,7 +72,7 @@
                     autoOpen: true,
                     resizeable: false,
                     title: 'Nhập thông tin Chức năng',
-                    height: 300,
+                    height: 500,
                     width: 600,
                     close: function () {
                         Popup.dialog('destroy').remove();
