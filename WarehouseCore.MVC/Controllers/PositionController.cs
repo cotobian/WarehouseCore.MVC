@@ -17,7 +17,7 @@ namespace WarehouseCore.MVC.Controllers
 
         public async Task<JsonResult> GetPosition()
         {
-            List<Position> position = await db.Positions.ToListAsync();
+            List<Position> position = await db.Positions.Where(c => c.Status != -1).ToListAsync();
             return Json(new { data = position }, JsonRequestBehavior.AllowGet);
         }
 

@@ -12,6 +12,8 @@ namespace WarehouseCore.MVC.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class WarehouseEntities : DbContext
     {
@@ -25,13 +27,18 @@ namespace WarehouseCore.MVC.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<Function> Functions { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
-        public virtual DbSet<POs> POs { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<POs> POs { get; set; }
+    
+        public virtual ObjectResult<Admin_User_Result> Admin_User()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin_User_Result>("Admin_User");
+        }
     }
 }

@@ -10,19 +10,15 @@
 namespace WarehouseCore.MVC.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class POs
+    public partial class Admin_User_Result
     {
         public int Id { get; set; }
-        public Nullable<int> BookingId { get; set; }
-        public string POSO { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public string Unit { get; set; }
-        public string Dimension { get; set; }
-        public Nullable<decimal> CBM { get; set; }
-        public Nullable<decimal> GWeight { get; set; }
-        public Nullable<int> PositionId { get; set; }
-        public Nullable<int> Status { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string FullName { get; set; }
+        public Nullable<int> RoleId { get; set; }
+        public int Status { get; set; }
+        public string RoleName { get; set; }
     }
 }

@@ -18,15 +18,8 @@ namespace WarehouseCore.MVC.Controllers
 
         public async Task<JsonResult> GetUser()
         {
-            var user = await (from u in db.Users
-                              join r in db.Roles on u.RoleId equals r.Id
-                              select new { u, r.RoleName }).ToListAsync();
-            List<UserVm> uservm = user.Select(e => new UserVm
-            {
-                user = e.u,
-                RoleName = e.RoleName
-            }).ToList();
-            return Json(new { data = uservm }, JsonRequestBehavior.AllowGet);
+            List<Admin_User_Result> user = db.Admin_User().ToList();
+            return Json(new { data = user }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

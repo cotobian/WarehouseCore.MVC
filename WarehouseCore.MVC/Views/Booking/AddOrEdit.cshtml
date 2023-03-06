@@ -1,17 +1,73 @@
-﻿
+﻿@model WarehouseCore.MVC.Models.Booking
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>AddOrEdit</title>
-</head>
-<body>
-    <div> 
+@using (Html.BeginForm("AddOrEdit", "Booking", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Shipment</label>
+            @Html.EditorFor(model => model.Shipment, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Consol</label>
+            @Html.EditorFor(model => model.Consol, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
     </div>
-</body>
-</html>
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Shipper</label>
+            @Html.EditorFor(model => model.Shipper, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Consignee</label>
+            @Html.EditorFor(model => model.Consignee, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Destination</label>
+            @Html.EditorFor(model => model.Destination, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">TruckNo</label>
+            @Html.EditorFor(model => model.TruckNo, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Pkg</label>
+            @Html.EditorFor(model => model.Pkg, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Unit</label>
+            @Html.EditorFor(model => model.Unit, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">G.Weight</label>
+            @Html.EditorFor(model => model.GWeight, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">ActualCBM</label>
+            @Html.EditorFor(model => model.ActualCBM, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Cargo Receipt No</label>
+            @Html.EditorFor(model => model.CargoReceiptNumber, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Remark</label>
+            @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Cập nhật" class="btn btn-primary" />
+        <input type="reset" value="Reset" class="btn btn-warning" />
+    </div>
+}

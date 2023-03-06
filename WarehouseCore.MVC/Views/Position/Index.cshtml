@@ -1,11 +1,11 @@
 ﻿@{
-    ViewBag.Title = "Danh sách Vị trí kko";
+    ViewBag.Title = "Danh sách Vị trí kho";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="card">
     <div class="card-header">
-        <h3>Danh sách Phân quyền</h3>
+        <h3>Danh sách Vị trí kho</h3>
     </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -34,7 +34,7 @@
                     "datatype": "json",
                 },
                 "columns": [
-                    { "data": "Position" },
+                    { "data": "PositionName" },
                     {
                         "data": "Id", "render": function (data) {
                             return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "Position")/" + data + "')><i />";
@@ -65,8 +65,8 @@
                 Popup = formDiv.dialog({
                     autoOpen: true,
                     resizeable: false,
-                    title: 'Nhập thông tin phân quyền',
-                    height: 300,
+                    title: 'Nhập thông tin Vị trí kho',
+                    height: 220,
                     width: 600,
                     close: function () {
                         Popup.dialog('destroy').remove();
@@ -95,7 +95,7 @@
         }
 
         function Delete(id) {
-            if (confirm("Bạn có muốn xóa phân quyền này không?")) {
+            if (confirm("Bạn có muốn xóa Vị trí kho này không?")) {
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete", "Position")/' + id,

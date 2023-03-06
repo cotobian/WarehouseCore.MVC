@@ -13,7 +13,9 @@
             <table id="truckTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Vị trí</th>
+                        <th>Tên đầy đủ</th>
+                        <th>Tài khoản</th>
+                        <th>Chức danh</th>
                         <th>Sửa</th>
                         <th>Xóa</th>
                     </tr>
@@ -28,13 +30,16 @@
         var Popup, dataTable;
         $(document).ready(function () {
             dataTable = $("#truckTable").DataTable({
+                "processing": "true",
                 "ajax": {
                     "url": "/User/GetUser",
                     "type": "GET",
                     "datatype": "json",
                 },
                 "columns": [
-                    { "data": "User" },
+                    { "data": "FullName" },
+                    { "data": "Username" },
+                    { "data": "RoleName" },
                     {
                         "data": "Id", "render": function (data) {
                             return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "User")/" + data + "')><i />";
@@ -66,7 +71,7 @@
                     autoOpen: true,
                     resizeable: false,
                     title: 'Nhập thông tin Người dùng',
-                    height: 300,
+                    height: 400,
                     width: 600,
                     close: function () {
                         Popup.dialog('destroy').remove();

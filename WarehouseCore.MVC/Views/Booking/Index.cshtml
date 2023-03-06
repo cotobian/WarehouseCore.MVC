@@ -1,7 +1,158 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Booking Confirms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="card">
+    <div class="card-header">
+        <h3>Booking Confirms</h3>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            <a class="btn btn-success" style="margin-bottom:10px;" onclick="PopupForm('@Url.Action("AddOrEdit","Booking")')"><i class="fa fa-plus"></i> Thêm mới</a>
+            <form id="fileUploadForm" style="display: inline">
+                <input type="file" name="file" id="file" style="margin-left: 10px" accept=".pdf" />
+                <input id="btnSubmit" type="button" value="Import Excel" class="btn btn-primary" />
+            </form>
+            <table id="truckTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Shipment</th>
+                        <th>Consol</th>
+                        <th>Shipper</th>
+                        <th>Consignee</th>
+                        <th>Destination</th>
+                        <th>Pkg</th>
+                        <th>Unit</th>
+                        <th>G.Weight</th>
+                        <th>Actual CBM</th>
+                        <th>Cargo Recipt No.</th>
+                        <th>Ngày</th>
+                        <th>Sửa</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
 
+@section scripts{
+    <script>
+        var Popup, dataTable;
+        $(document).ready(function () {
+            dataTable = $("#truckTable").DataTable({
+                "ajax": {
+                    "url": "/Booking/GetBooking",
+                    "type": "GET",
+                    "datatype": "json",
+                },
+                "columns": [
+                    { "data": "Shipment" },
+                    { "data": "Consol" },
+                    { "data": "Shipper" },
+                    { "data": "Consignee" },
+                    { "data": "Destination" },
+                    { "data": "Pkg" },
+                    { "data": "Unit" },
+                    { "data": "GWeight" },
+                    { "data": "ActualCBM" },
+                    { "data": "CargoReceiptNumber" },
+                    { "data": "Date" },
+                    {
+                        "data": "Id", "render": function (data) {
+                            return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "Booking")/" + data + "')><i />";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "10px",
+                        "className": 'text-center'
+                    },
+                    {
+                        "data": "Id", "render": function (data) {
+                            return "<i class='fa fa-trash f-20 text-danger' onclick=Delete(" + data + ")></i>";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "10px",
+                        "className": 'text-center'
+                    }
+                ]
+            });
+        });
+
+        $('#btnSubmit').click(function () {
+            var formData = new FormData();
+            formData.append('file', $('#file')[0].files[0]);
+
+            $.ajax({
+                url: '/Booking/UploadBooking',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+        });
+
+        function PopupForm(url) {
+            var formDiv = $('<div />');
+            $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizeable: false,
+                    title: 'Nhập thông tin Booking',
+                    height: 600,
+                    width: 800,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+        }
+
+        function SubmitForm(form) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalBooking: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
+            return false;
+        }
+
+        function Delete(id) {
+            if (confirm("Bạn có muốn xóa Booking này không?")) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete", "Booking")/' + id,
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable.ajax.reload();
+                            $.notify(data.message, {
+                                globalBooking: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}

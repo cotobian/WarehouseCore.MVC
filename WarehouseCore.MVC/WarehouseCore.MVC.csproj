@@ -178,6 +178,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BookingController.cs" />
+    <Compile Include="Controllers\BookingDetailController.cs" />
     <Compile Include="Controllers\FunctionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
@@ -193,6 +194,9 @@
     <Compile Include="Helpers\ExcelExport.cs" />
     <Compile Include="Helpers\PdfParser.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
+    <Compile Include="Models\Admin_User_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Booking.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
@@ -2217,9 +2221,12 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Job\AddOrEdit.cshtml" />
+    <Content Include="Views\BookingDetail\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Forms\" />
+    <Folder Include="UploadFiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
