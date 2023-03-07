@@ -22,7 +22,7 @@ namespace WarehouseCore.MVC.Controllers
 
         public async Task<JsonResult> GetBooking()
         {
-            List<Booking> booking = await db.Bookings.ToListAsync();
+            List<Booking> booking = await db.Bookings.Where(c => c.Status != -1).ToListAsync();
             return Json(new { data = booking }, JsonRequestBehavior.AllowGet);
         }
 

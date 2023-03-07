@@ -15,23 +15,16 @@ namespace WarehouseCore.MVC.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetPO()
+        public JsonResult GetPO()
         {
-            var po = await (from pos in db.POs
-                            join p in db.Positions on pos.PositionId equals p.Id
-                            select new { pos, p.PositionName }).ToListAsync();
-            List<POVm> povm = po.Select(e => new POVm
-            {
-                Po = e.pos,
-                Position = e.PositionName
-            }).ToList();
+            var po = db.WH_GetAllPO().ToList();
             return Json(new { data = po }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public async Task<ActionResult> AddOrEdit(int id = 0)
         {
-            ViewBag.PositionList = await db.Bookings.ToListAsync();
+            ViewBag.PositionList = await db.Bookings.Where(c => c.Status != -1).ToListAsync();
             if (id == 0) return View(new Position());
             else return View(await db.Bookings.Where(c => c.Id == id).FirstOrDefaultAsync());
         }

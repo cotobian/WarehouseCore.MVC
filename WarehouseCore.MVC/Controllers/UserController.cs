@@ -16,7 +16,7 @@ namespace WarehouseCore.MVC.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetUser()
+        public JsonResult GetUser()
         {
             List<Admin_User_Result> user = db.Admin_User().ToList();
             return Json(new { data = user }, JsonRequestBehavior.AllowGet);
@@ -25,7 +25,7 @@ namespace WarehouseCore.MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> AddOrEdit(int id = 0)
         {
-            ViewBag.RoleList = await db.Roles.ToListAsync();
+            ViewBag.RoleList = await db.Roles.Where(c => c.Status != -1).ToListAsync();
             if (id == 0) return View(new User());
             else return View(await db.Users.Where(c => c.Id == id).FirstOrDefaultAsync());
         }

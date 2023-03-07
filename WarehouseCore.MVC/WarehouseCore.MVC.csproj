@@ -191,9 +191,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BarcodeCreator.cs" />
-    <Compile Include="Helpers\ExcelExport.cs" />
+    <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Helpers\PdfParser.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
+    <Compile Include="Models\Admin_GetAllFunction_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Admin_GetAllPermission_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Admin_User_Result.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
@@ -235,6 +241,15 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WarehouseCore.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WH_GetAllJob_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WH_GetAllPO_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WH_GetPOByBooking_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ChangePasswordVm.cs" />

@@ -10,18 +10,14 @@
 namespace WarehouseCore.MVC.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Job
+    public partial class Admin_GetAllPermission_Result
     {
         public int Id { get; set; }
-        public Nullable<int> JobType { get; set; }
-        public Nullable<int> POsId { get; set; }
-        public Nullable<int> PositionId { get; set; }
-        public Nullable<System.DateTime> DateCreated { get; set; }
-        public Nullable<System.DateTime> DateCompleted { get; set; }
-        public Nullable<int> UserCreated { get; set; }
-        public Nullable<int> UserCompleted { get; set; }
+        public int FunctionId { get; set; }
+        public int RoleId { get; set; }
         public Nullable<int> Status { get; set; }
+        public string Name { get; set; }
+        public string RoleName { get; set; }
     }
 }

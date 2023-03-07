@@ -17,14 +17,14 @@ namespace WarehouseCore.MVC.Controllers
 
         public async Task<JsonResult> GetFunction()
         {
-            List<Function> function = await db.Functions.ToListAsync();
+            List<Function> function = await db.Functions.Where(c => c.Status != -1).ToListAsync();
             return Json(new { data = function }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public async Task<ActionResult> AddOrEdit(int id = 0)
         {
-            ViewBag.ParentFunctionList = await db.Functions.Where(c => c.ParentId == null).ToListAsync();
+            ViewBag.ParentFunctionList = await db.Functions.Where(c => c.ParentId == null && c.Status != -1).ToListAsync();
             if (id == 0) return View(new Function());
             else return View(await db.Functions.Where(c => c.Id == id).FirstOrDefaultAsync());
         }

@@ -28,17 +28,51 @@ namespace WarehouseCore.MVC.Models
         }
     
         public virtual DbSet<Function> Functions { get; set; }
-        public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<POs> POs { get; set; }
+        public virtual DbSet<Job> Jobs { get; set; }
     
         public virtual ObjectResult<Admin_User_Result> Admin_User()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin_User_Result>("Admin_User");
+        }
+    
+        public virtual ObjectResult<Admin_GetAllFunction_Result> Admin_GetAllFunction()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin_GetAllFunction_Result>("Admin_GetAllFunction");
+        }
+    
+        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob");
+        }
+    
+        public virtual ObjectResult<WH_GetAllPO_Result> WH_GetAllPO()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllPO_Result>("WH_GetAllPO");
+        }
+    
+        public virtual ObjectResult<WH_GetPOByBooking_Result> WH_GetPOByBooking(Nullable<int> bookingid)
+        {
+            var bookingidParameter = bookingid.HasValue ?
+                new ObjectParameter("bookingid", bookingid) :
+                new ObjectParameter("bookingid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOByBooking_Result>("WH_GetPOByBooking", bookingidParameter);
+        }
+    
+        public virtual ObjectResult<Admin_GetAllPermission_Result> Admin_GetAllPermission()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin_GetAllPermission_Result>("Admin_GetAllPermission");
+        }
+    
+        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob1");
         }
     }
 }

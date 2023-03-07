@@ -13,7 +13,8 @@ namespace WarehouseCore.MVC.Helpers
         public ParserVm BookingParser(string filePath)
         {
             ParserVm parser = new ParserVm();
-            PdfReader reader = new PdfReader(filePath);
+            
+            //parse PO
             PdfReader poreader = new PdfReader(filePath);
             int pageNumber = 1;
             float x = 0;
@@ -26,6 +27,9 @@ namespace WarehouseCore.MVC.Helpers
             string potext = PdfTextExtractor.GetTextFromPage(poreader, pageNumber, strategy);
             poreader.Close();
             string[] po = potext.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            //parse booking
+            PdfReader reader = new PdfReader(filePath);
             int numPages = reader.NumberOfPages;
             string booking = "";
             for (int pageNum = 1; pageNum <= numPages; pageNum++)

@@ -16,28 +16,17 @@ namespace WarehouseCore.MVC.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetPermission()
+        public JsonResult GetPermission()
         {
-            var list = await (from p in db.Permissions
-                              join f in db.Functions on p.FunctionId equals f.Id
-                              join r in db.Roles on p.RoleId equals r.Id
-                              select new { p.Id, p.FunctionId, p.RoleId, f.Name, r.RoleName }).ToListAsync();
-            List<PermissionVm> permission = list.Select(e => new PermissionVm
-            {
-                Id = e.Id,
-                FunctionId = e.FunctionId,
-                RoleId = e.RoleId,
-                FunctionName = e.Name,
-                RoleName = e.RoleName
-            }).ToList();
-            return Json(new { data = permission }, JsonRequestBehavior.AllowGet);
+            var list = db.Admin_GetAllPermission().ToList();
+            return Json(new { data = list }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public async Task<ActionResult> AddOrEdit(int id = 0)
         {
-            ViewBag.RoleList = await db.Roles.ToListAsync();
-            ViewBag.FunctionList = await db.Functions.ToListAsync();
+            ViewBag.RoleList = await db.Roles.Where(c => c.Status != -1).ToListAsync();
+            ViewBag.FunctionList = await db.Functions.Where(c => c.Status != -1).ToListAsync();
             if (id == 0) return View(new Permission());
             else return View(await db.Permissions.Where(c => c.Id == id).FirstOrDefaultAsync());
         }

@@ -5,7 +5,8 @@ using System.Web;
 
 namespace WarehouseCore.MVC.Helpers
 {
-    public class ExcelExport
+    public class ExcelHelper
     {
+        
     }
 }

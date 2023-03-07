@@ -59,9 +59,8 @@ namespace WarehouseCore.MVC.Controllers
             {
                 return Json(new { success = true, message = "Dữ liệu không tồn tại" }, JsonRequestBehavior.AllowGet);
             }
-            Type t = model.GetType();
-            PropertyInfo prop = t.GetProperty("Status");
-            prop.SetValue(prop, -1);
+            PropertyInfo prop = model.GetType().GetProperty("Status");
+            prop.SetValue(model, -1);
             await db.SaveChangesAsync();
             return Json(new { success = true, message = "Xóa dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
         }

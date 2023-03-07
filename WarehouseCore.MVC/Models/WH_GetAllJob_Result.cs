@@ -10,9 +10,8 @@
 namespace WarehouseCore.MVC.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Job
+    public partial class WH_GetAllJob_Result
     {
         public int Id { get; set; }
         public Nullable<int> JobType { get; set; }
@@ -23,5 +22,13 @@ namespace WarehouseCore.MVC.Models
         public Nullable<int> UserCreated { get; set; }
         public Nullable<int> UserCompleted { get; set; }
         public Nullable<int> Status { get; set; }
+        public string StatusText { get; set; }
+        public string PositionName { get; set; }
+        public string POSO { get; set; }
+        public string JobTypeText { get; set; }
+        public string CreateDateText { get; set; }
+        public string CompleteDateText { get; set; }
+        public string UserCreateName { get; set; }
+        public string UserCompleteName { get; set; }
     }
 }

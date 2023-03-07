@@ -17,7 +17,7 @@ namespace WarehouseCore.MVC.Controllers
 
         public async Task<JsonResult> GetRole()
         {
-            List<Role> role = await db.Roles.ToListAsync();
+            List<Role> role = await db.Roles.Where(c => c.Status != -1).ToListAsync();
             return Json(new { data = role }, JsonRequestBehavior.AllowGet);
         }
 

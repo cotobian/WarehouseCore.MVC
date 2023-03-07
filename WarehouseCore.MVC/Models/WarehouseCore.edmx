@@ -44,7 +44,6 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="JobType" Type="int" />
           <Property Name="POsId" Type="int" />
-          <Property Name="UserId" Type="int" />
           <Property Name="PositionId" Type="int" />
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="DateCompleted" Type="datetime" />
@@ -104,7 +103,14 @@
           <Property Name="RoleId" Type="int" />
           <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
+        <Function Name="Admin_GetAllFunction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Admin_GetAllPermission" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="Admin_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="WH_GetAllJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="WH_GetAllPO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="WH_GetPOByBooking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="bookingid" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="WarehouseModelStoreContainer">
           <EntitySet Name="Bookings" EntityType="Self.Bookings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Functions" EntityType="Self.Functions" Schema="dbo" store:Type="Tables" />
@@ -131,21 +137,6 @@
           <Property Name="Icon" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="Job">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="JobType" Type="Int32" />
-          <Property Name="POsId" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="PositionId" Type="Int32" />
-          <Property Name="DateCreated" Type="DateTime" Precision="3" />
-          <Property Name="DateCompleted" Type="DateTime" Precision="3" />
-          <Property Name="UserCreated" Type="Int32" />
-          <Property Name="UserCompleted" Type="Int32" />
-          <Property Name="Status" Type="Int32" />
-        </EntityType>
         <EntityType Name="Permission">
           <Key>
             <PropertyRef Name="Id" />
@@ -168,7 +159,6 @@
         </EntityType>
         <EntityContainer Name="WarehouseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Functions" EntityType="Self.Function" />
-          <EntitySet Name="Jobs" EntityType="Self.Job" />
           <EntitySet Name="Permissions" EntityType="Self.Permission" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="Roles" EntityType="WarehouseModel.Role" />
@@ -176,6 +166,15 @@
           <FunctionImport Name="Admin_User" ReturnType="Collection(WarehouseModel.Admin_User_Result)" />
           <EntitySet Name="Bookings" EntityType="WarehouseModel.Booking" />
           <EntitySet Name="POs" EntityType="WarehouseModel.POs" />
+          <EntitySet Name="Jobs" EntityType="WarehouseModel.Job" />
+          <FunctionImport Name="Admin_GetAllFunction" ReturnType="Collection(WarehouseModel.Admin_GetAllFunction_Result)" />
+          <FunctionImport Name="WH_GetAllJob" ReturnType="Collection(WarehouseModel.WH_GetAllJob_Result)" />
+          <FunctionImport Name="WH_GetAllPO" ReturnType="Collection(WarehouseModel.WH_GetAllPO_Result)" />
+          <FunctionImport Name="WH_GetPOByBooking" ReturnType="Collection(WarehouseModel.WH_GetPOByBooking_Result)">
+          <Parameter Name="bookingid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Admin_GetAllPermission" ReturnType="Collection(WarehouseModel.Admin_GetAllPermission_Result)" />
+          <FunctionImport Name="WH_GetAllJob1" ReturnType="Collection(WarehouseModel.WH_GetAllJob_Result)" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -238,6 +237,87 @@
           <Property Name="PositionId" Type="Int32" />
           <Property Name="Status" Type="Int32" />
         </EntityType>
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobType" Type="Int32" />
+          <Property Name="POsId" Type="Int32" />
+          <Property Name="PositionId" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="DateCompleted" Type="DateTime" Precision="3" />
+          <Property Name="UserCreated" Type="Int32" />
+          <Property Name="UserCompleted" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+        </EntityType>
+        <ComplexType Name="Admin_GetAllFunction_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Url" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="SortOrder" Nullable="true" />
+          <Property Type="Int32" Name="ParentId" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Icon" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="String" Name="ParentName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="WH_GetAllJob_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="JobType" Nullable="true" />
+          <Property Type="Int32" Name="POsId" Nullable="true" />
+          <Property Type="Int32" Name="PositionId" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="DateCompleted" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UserCreated" Nullable="true" />
+          <Property Type="Int32" Name="UserCompleted" Nullable="true" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="String" Name="StatusText" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="POSO" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="JobTypeText" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="CreateDateText" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="CompleteDateText" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="UserCreateName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="UserCompleteName" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="WH_GetAllPO_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="BookingId" Nullable="true" />
+          <Property Type="String" Name="POSO" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Dimension" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="CBM" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="Decimal" Name="GWeight" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="Int32" Name="PositionId" Nullable="true" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="String" Name="StatusText" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Shipment" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="WH_GetPOByBooking_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="BookingId" Nullable="true" />
+          <Property Type="String" Name="POSO" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Dimension" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="CBM" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="Decimal" Name="GWeight" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="Int32" Name="PositionId" Nullable="true" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="String" Name="StatusText" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Shipment" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Admin_GetAllPermission_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="FunctionId" Nullable="false" />
+          <Property Type="Int32" Name="RoleId" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RoleName" Nullable="true" MaxLength="50" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -253,22 +333,6 @@
                 <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Icon" ColumnName="Icon" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Jobs">
-            <EntityTypeMapping TypeName="WarehouseModel.Job">
-              <MappingFragment StoreEntitySet="Jobs">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="JobType" ColumnName="JobType" />
-                <ScalarProperty Name="POsId" ColumnName="POsId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
-                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
-                <ScalarProperty Name="UserCompleted" ColumnName="UserCompleted" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -364,6 +428,126 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Jobs">
+            <EntityTypeMapping TypeName="WarehouseModel.Job">
+              <MappingFragment StoreEntitySet="Jobs">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserCompleted" ColumnName="UserCompleted" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="POsId" ColumnName="POsId" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Admin_GetAllFunction" FunctionName="WarehouseModel.Store.Admin_GetAllFunction">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.Admin_GetAllFunction_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ParentName" ColumnName="ParentName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetAllJob" FunctionName="WarehouseModel.Store.WH_GetAllJob">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetAllJob_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="POsId" ColumnName="POsId" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="UserCompleted" ColumnName="UserCompleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetAllPO" FunctionName="WarehouseModel.Store.WH_GetAllPO">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetAllPO_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Dimension" ColumnName="Dimension" />
+                <ScalarProperty Name="CBM" ColumnName="CBM" />
+                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetPOByBooking" FunctionName="WarehouseModel.Store.WH_GetPOByBooking">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetPOByBooking_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Dimension" ColumnName="Dimension" />
+                <ScalarProperty Name="CBM" ColumnName="CBM" />
+                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Admin_GetAllPermission" FunctionName="WarehouseModel.Store.Admin_GetAllPermission">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.Admin_GetAllPermission_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FunctionId" ColumnName="FunctionId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetAllJob1" FunctionName="WarehouseModel.Store.WH_GetAllJob">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetAllJob_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="POsId" ColumnName="POsId" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="UserCompleted" ColumnName="UserCompleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="JobTypeText" ColumnName="JobTypeText" />
+                <ScalarProperty Name="CreateDateText" ColumnName="CreateDateText" />
+                <ScalarProperty Name="CompleteDateText" ColumnName="CompleteDateText" />
+                <ScalarProperty Name="UserCreateName" ColumnName="UserCreateName" />
+                <ScalarProperty Name="UserCompleteName" ColumnName="UserCompleteName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
