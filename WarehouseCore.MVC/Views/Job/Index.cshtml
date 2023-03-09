@@ -5,15 +5,11 @@
 
 <div class="card">
     <div class="card-header">
-        <h3>Job Confirms</h3>
+        <h3>Warehouse Jobs</h3>
     </div>
     <div class="card-body">
         <div class="container-fluid">
             <a class="btn btn-success" style="margin-bottom:10px;" onclick="PopupForm('@Url.Action("AddOrEdit","Job")')"><i class="fa fa-plus"></i> Thêm mới</a>
-            <form id="fileUploadForm" style="display: inline">
-                <input type="file" name="file" id="file" style="margin-left: 10px" accept=".pdf" />
-                <input id="btnSubmit" type="button" value="Import Excel" class="btn btn-primary" />
-            </form>
             <table id="truckTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
@@ -21,12 +17,11 @@
                         <th>PO</th>
                         <th>Loại Job</th>
                         <th>Vị trí</th>
-                        <th>Trạng thái</th>
-                        <th>Người tạo</th>
-                        <th>Ngày tạo</th>
-                        <th>Người hoàn tất</th>
-                        <th>Ngày hoàn tất</th>
-                        <th>Sửa</th>
+                        @*<th>Trạng thái</th>
+                            <th>Người tạo</th>
+                            <th>Ngày tạo</th>
+                            <th>Người hoàn tất</th>
+                            <th>Ngày hoàn tất</th>*@
                         <th>Xóa</th>
                     </tr>
                 </thead>
@@ -51,30 +46,12 @@
                     { "data": "JobTypeText" },
                     { "data": "PositionName" },
                     { "data": "StatusText" },
-                    { "data": "Pkg" },
-                    { "data": "Unit" },
-                    { "data": "GWeight" },
-                    { "data": "ActualCBM" },
-                    { "data": "CargoReceiptNumber" },
-                    { "data": "Date" },
-                    {
-                        "data": "Id", "render": function (data) {
-                            return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "Job")/" + data + "')><i />";
-                        },
-                        "orderable": false,
-                        "searchable": false,
-                        "width": "10px",
-                        "className": 'text-center'
-                    },
-                    {
-                        "data": "Id", "render": function (data) {
-                            return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "Job")/" + data + "')><i />";
-                        },
-                        "orderable": false,
-                        "searchable": false,
-                        "width": "10px",
-                        "className": 'text-center'
-                    },
+                    //{ "data": "Pkg" },
+                    //{ "data": "Unit" },
+                    //{ "data": "GWeight" },
+                    //{ "data": "ActualCBM" },
+                    //{ "data": "CargoReceiptNumber" },
+                    //{ "data": "Date" },
                     {
                         "data": "Id", "render": function (data) {
                             return "<i class='fa fa-trash f-20 text-danger' onclick=Delete(" + data + ")></i>";

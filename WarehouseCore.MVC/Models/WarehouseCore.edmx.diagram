@@ -10,9 +10,9 @@
         <EntityTypeShape EntityType="WarehouseModel.User" Width="1.5" PointX="6.875" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="WarehouseModel.Role" Width="1.5" PointX="0.875" PointY="3.5" />
         <EntityTypeShape EntityType="WarehouseModel.Position" Width="1.5" PointX="7.375" PointY="0.75" />
-        <EntityTypeShape EntityType="WarehouseModel.Booking" Width="1.5" PointX="0.75" PointY="7.75" />
-        <EntityTypeShape EntityType="WarehouseModel.POs" Width="1.5" PointX="2.75" PointY="7.75" />
         <EntityTypeShape EntityType="WarehouseModel.Job" Width="1.5" PointX="5.375" PointY="7.75" />
+        <EntityTypeShape EntityType="WarehouseModel.Booking" Width="1.5" PointX="7.375" PointY="7.75" />
+        <EntityTypeShape EntityType="WarehouseModel.POs" Width="1.5" PointX="0.75" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -23,6 +23,6 @@ namespace WarehouseCore.MVC.Models
         public Nullable<decimal> CBM { get; set; }
         public Nullable<decimal> GWeight { get; set; }
         public Nullable<int> PositionId { get; set; }
-        public Nullable<int> Status { get; set; }
+        public int Status { get; set; }
     }
 }

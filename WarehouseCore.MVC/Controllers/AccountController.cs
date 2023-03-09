@@ -26,7 +26,7 @@ namespace WarehouseCore.MVC.Controllers
         {
             string hashPassword = textHelper.GetHashString(model.Password);
             User user = db.Users.Where(c => c.Username == model.Username && c.Password == hashPassword).FirstOrDefault();
-            if(user != null)
+            if (user != null)
             {
                 Session.Add("Name", user.FullName);
                 Session.Add("Id", user.Id);

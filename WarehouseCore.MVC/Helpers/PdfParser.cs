@@ -13,8 +13,8 @@ namespace WarehouseCore.MVC.Helpers
         public ParserVm BookingParser(string filePath)
         {
             ParserVm parser = new ParserVm();
-            
-            //parse PO
+
+            //tim so PO
             PdfReader poreader = new PdfReader(filePath);
             int pageNumber = 1;
             float x = 0;
@@ -38,13 +38,19 @@ namespace WarehouseCore.MVC.Helpers
                 booking = booking + text;
             }
             string[] lines = booking.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
             string booking_confirmation_line = lines.FirstOrDefault(l => l.StartsWith("Booking"));
             int booking_line_index = Array.IndexOf(lines, booking_confirmation_line);
             string booking_confirmation = lines[booking_line_index + 1];
+            //tim so consol
             string consol_line = lines.FirstOrDefault(l => l.StartsWith("CONSOL"));
             string consol = consol_line.Replace("CONSOL", "").Trim();
+
+            //tim so shipment
             string shipment_line = lines.FirstOrDefault(l => l.StartsWith("SHIPMENT"));
-            string shipment = shipment_line.Replace("SHIPMENT","").Trim();
+            string shipment = shipment_line.Replace("SHIPMENT", "").Trim();
+
+            //tim shipper
             string shipper_line = lines.FirstOrDefault(l => l.StartsWith("SHIPPER"));
             string shipper = shipper_line.Replace("SHIPPER", "").Trim();
             string shipment_consignee_line = lines.FirstOrDefault(l => l.StartsWith("SHIPPER CONSIGNEE"));
@@ -61,7 +67,7 @@ namespace WarehouseCore.MVC.Helpers
             parser.booking.Consignee = consignee;
 
             //gan du lieu POs
-            foreach(string pos in po)
+            foreach (string pos in po)
             {
                 POs poi = new POs();
                 poi.POSO = pos;

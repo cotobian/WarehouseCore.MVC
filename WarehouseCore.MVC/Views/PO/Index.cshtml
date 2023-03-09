@@ -1,24 +1,104 @@
-﻿@{
-    ViewBag.Title = "Danh sách PO";
+﻿@model WarehouseCore.MVC.Models.Booking
+@{
+    ViewBag.Title = "Booking Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="card">
     <div class="card-header">
-        <h3>Danh sách PO</h3>
+        <h3>Booking Details</h3>
     </div>
     <div class="card-body">
         <div class="container-fluid">
-            <a class="btn btn-success" style="margin-bottom:10px;" onclick="PopupForm('@Url.Action("AddOrEdit","PO")')"><i class="fa fa-plus"></i> Thêm mới</a>
+            <div class="row">
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Shipment:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.Shipment
+                </div>
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Consol:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.Consol
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Shipper:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.Shipper
+                </div>
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Consignee:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.Consignee
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Destination:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.Destination
+                </div>
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Gross Weight:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.GWeight
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Actual CBM:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.ActualCBM
+                </div>
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Cargo Receipt Number:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.CargoReceiptNumber
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Remark:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.Remark
+                </div>
+                <div class="col-md-2 col-lg-2 label">
+                    <strong>Date:</strong>
+                </div>
+                <div class="col-md-4 col-lg-4 label">
+                    @Model.Date
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>PO List</h3>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            <a class="btn btn-success" style="margin-bottom:10px;" onclick="AddNewPopUp()"><i class="fa fa-plus"></i> Thêm mới</a>
             <table id="truckTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Số PO/SO</th>
-                        <th>Đơn vị tính</th>
-                        <th>Số lượng</th>
-                        <th>Kích thước</th>
+                        <th>PO/SO</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Dimension</th>
                         <th>CBM</th>
-                        <th>Gross Weight</th>
+                        <th>G.Weight</th>
                         <th>Vị trí</th>
                         <th>Sửa</th>
                         <th>Xóa</th>
@@ -33,9 +113,10 @@
     <script>
         var Popup, dataTable;
         $(document).ready(function () {
+            let url = "/PO/GetPOByBooking?Id=" + @Model.Id;
             dataTable = $("#truckTable").DataTable({
                 "ajax": {
-                    "url": "/PO/GetPO",
+                    "url": url,
                     "type": "GET",
                     "datatype": "json",
                 },
@@ -46,10 +127,10 @@
                     { "data": "Dimension" },
                     { "data": "CBM" },
                     { "data": "GWeight" },
-                    { "data": "Position" },
+                    { "data": "PositionName" },
                     {
                         "data": "Id", "render": function (data) {
-                            return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "PO")/" + data + "')><i />";
+                            return "<i class='fa fa-pencil f-18 text-success' onclick=EditPopUp(" + data + ")><i />";
                         },
                         "orderable": false,
                         "searchable": false,
@@ -69,6 +150,16 @@
             });
         });
 
+        function AddNewPopUp() {
+            let url = "/PO/AddOrEdit?bookingid=" + @Model.Id;
+            PopupForm(url);
+        }
+
+        function EditPopUp(id) {
+            let url = "/PO/AddOrEdit?bookingid=" + @Model.Id + "&id=" + id;
+            PopupForm(url);
+        }
+
         function PopupForm(url) {
             var formDiv = $('<div />');
             $.get(url)
@@ -78,7 +169,7 @@
                     autoOpen: true,
                     resizeable: false,
                     title: 'Nhập thông tin PO',
-                    height: 300,
+                    height: 480,
                     width: 600,
                     close: function () {
                         Popup.dialog('destroy').remove();
@@ -97,7 +188,7 @@
                         Popup.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {
-                            globalPO: "top center",
+                            globalBooking: "top center",
                             className: "success"
                         })
                     }
@@ -115,7 +206,7 @@
                         if (data.success) {
                             dataTable.ajax.reload();
                             $.notify(data.message, {
-                                globalPO: "top center",
+                                globalBooking: "top center",
                                 className: "success"
                             })
                         }

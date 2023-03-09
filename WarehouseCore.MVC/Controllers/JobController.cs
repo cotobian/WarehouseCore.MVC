@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using WarehouseCore.MVC.Models;
-using WarehouseCore.MVC.ViewModels;
 
 namespace WarehouseCore.MVC.Controllers
 {
@@ -19,7 +15,7 @@ namespace WarehouseCore.MVC.Controllers
 
         public JsonResult GetJob()
         {
-            var list = db.WH_GetAllPO().ToList();
+            var list = db.WH_GetAllJob().ToList();
             return Json(new { data = list }, JsonRequestBehavior.AllowGet);
         }
 
