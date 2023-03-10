@@ -17,11 +17,6 @@
                         <th>PO</th>
                         <th>Loại Job</th>
                         <th>Vị trí</th>
-                        @*<th>Trạng thái</th>
-                            <th>Người tạo</th>
-                            <th>Ngày tạo</th>
-                            <th>Người hoàn tất</th>
-                            <th>Ngày hoàn tất</th>*@
                         <th>Xóa</th>
                     </tr>
                 </thead>
@@ -46,12 +41,6 @@
                     { "data": "JobTypeText" },
                     { "data": "PositionName" },
                     { "data": "StatusText" },
-                    //{ "data": "Pkg" },
-                    //{ "data": "Unit" },
-                    //{ "data": "GWeight" },
-                    //{ "data": "ActualCBM" },
-                    //{ "data": "CargoReceiptNumber" },
-                    //{ "data": "Date" },
                     {
                         "data": "Id", "render": function (data) {
                             return "<i class='fa fa-trash f-20 text-danger' onclick=Delete(" + data + ")></i>";
@@ -62,25 +51,6 @@
                         "className": 'text-center'
                     }
                 ]
-            });
-        });
-
-        $('#btnSubmit').click(function () {
-            var formData = new FormData();
-            formData.append('file', $('#file')[0].files[0]);
-
-            $.ajax({
-                url: '/Job/UploadJob',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-
-                },
-                error: function (xhr, status, error) {
-
-                }
             });
         });
 

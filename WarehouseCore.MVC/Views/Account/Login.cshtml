@@ -106,8 +106,8 @@
                         @Html.AntiForgeryToken()
                         <div style="text-align:center"><h2><b>HỆ THỐNG QUẢN LÝ</b></h2></div>
                         <div style="text-align:center"><h2><b>DSV LOGISTICS</b></h2></div>
-                        <p>@Html.TextBoxFor(a => a.Username, new { @class = "form-control", placeholder = "Nhập tài khoản" })</p>
-                        <p>@Html.PasswordFor(a => a.Password, new { @class = "form-control", placeholder = "Nhập mật khẩu" })</p>
+                        <p>@Html.TextBoxFor(model => model.Username, new { @class = "form-control", placeholder = "Nhập tài khoản" })</p>
+                        <p>@Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Nhập mật khẩu" })</p>
                         <button class="btn btn-lg btn-primary btn-block" type="submit">Đăng nhập</button>
                         <br />
                         @Html.ValidationSummary(true)

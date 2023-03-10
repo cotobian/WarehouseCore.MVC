@@ -1,17 +1,17 @@
-﻿
+﻿@model WarehouseCore.MVC.ViewModels.JobVm
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>AddOrEdit</title>
-</head>
-<body>
-    <div> 
+@using (Html.BeginForm("AddOrEdit", "Job", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.job.Id)
+    <div class="form-group">
+        <label class="control-label">Shipment:</label>
+        @Html.LabelFor(model => model.Shipment, new { htmlAttributes = new { @class = "form-label" } })
     </div>
-</body>
-</html>
+    <div class="form-group">
+        <input type="submit" value="Cập nhật" class="btn btn-primary" />
+        <input type="reset" value="Reset" class="btn btn-warning" />
+    </div>
+}

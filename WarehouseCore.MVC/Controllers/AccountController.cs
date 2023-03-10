@@ -17,7 +17,8 @@ namespace WarehouseCore.MVC.Controllers
         public ActionResult Login(string ReturnUrl = "")
         {
             if (User.Identity.IsAuthenticated) return LogOut();
-            return View();
+            Session["ReturnUrl"] = ReturnUrl;
+            return View(new LoginVm());
         }
 
         [AllowAnonymous]

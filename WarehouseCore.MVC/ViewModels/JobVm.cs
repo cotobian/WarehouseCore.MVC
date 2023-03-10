@@ -8,5 +8,6 @@ namespace WarehouseCore.MVC.ViewModels
         public string Position { get; set; }
         public string FullName { get; set; }
         public string PO { get; set; }
+        public string Shipment { get; set; }
     }
 }
