@@ -100,6 +100,7 @@
                         <th>CBM</th>
                         <th>G.Weight</th>
                         <th>Vị trí</th>
+                        <th>In</th>
                         <th>Sửa</th>
                         <th>Xóa</th>
                     </tr>
@@ -130,6 +131,15 @@
                     { "data": "PositionName" },
                     {
                         "data": "Id", "render": function (data) {
+                            return "<i class='fa fa-pencil f-18 text-success' onclick=Print(" + data + ")><i />";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "10px",
+                        "className": 'text-center'
+                    },
+                    {
+                        "data": "Id", "render": function (data) {
                             return "<i class='fa fa-pencil f-18 text-success' onclick=EditPopUp(" + data + ")><i />";
                         },
                         "orderable": false,
@@ -158,6 +168,24 @@
         function EditPopUp(id) {
             let url = "/PO/AddOrEdit?bookingid=" + @Model.Id + "&id=" + id;
             PopupForm(url);
+        }
+
+        function Print(id) {
+            $.ajax({
+                type: "GET",
+                url: "/PO/PrintPalletSheet?id=" + id,
+                contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                xhrFields: { responseType: 'blob' },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = 'PalletSheet.xlsx';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                }
+            });
+            return false;
         }
 
         function PopupForm(url) {

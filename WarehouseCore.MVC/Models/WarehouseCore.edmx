@@ -111,6 +111,9 @@
         <Function Name="WH_GetPOByBooking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="bookingid" Type="int" Mode="In" />
         </Function>
+        <Function Name="WH_GetPOById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="WarehouseModelStoreContainer">
           <EntitySet Name="Bookings" EntityType="Self.Bookings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Functions" EntityType="Self.Functions" Schema="dbo" store:Type="Tables" />
@@ -175,6 +178,15 @@
           <FunctionImport Name="WH_GetAllJob1" ReturnType="Collection(WarehouseModel.WH_GetAllJob_Result)" />
           <EntitySet Name="Bookings" EntityType="WarehouseModel.Booking" />
           <EntitySet Name="POs" EntityType="WarehouseModel.POs" />
+          <FunctionImport Name="WH_GetPOById" ReturnType="Collection(WarehouseModel.WH_GetPOById_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="WH_GetPOById1" ReturnType="Collection(WarehouseModel.WH_GetPOById_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="WH_GetPOById2" ReturnType="Collection(WarehouseModel.WH_GetPOById_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -318,6 +330,24 @@
           <Property Name="PositionId" Type="Int32" />
           <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
+        <ComplexType Name="WH_GetPOById_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="BookingId" Nullable="true" />
+          <Property Type="String" Name="POSO" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Dimension" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="CBM" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="Decimal" Name="GWeight" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="Int32" Name="PositionId" Nullable="true" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="String" Name="StatusText" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Shipment" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Consignee" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Shipper" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Destination" Nullable="true" MaxLength="200" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -548,6 +578,68 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetPOById" FunctionName="WarehouseModel.Store.WH_GetPOById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetPOById_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Dimension" ColumnName="Dimension" />
+                <ScalarProperty Name="CBM" ColumnName="CBM" />
+                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetPOById1" FunctionName="WarehouseModel.Store.WH_GetPOById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetPOById_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Dimension" ColumnName="Dimension" />
+                <ScalarProperty Name="CBM" ColumnName="CBM" />
+                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="Shipper" ColumnName="Shipper" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetPOById2" FunctionName="WarehouseModel.Store.WH_GetPOById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetPOById_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Dimension" ColumnName="Dimension" />
+                <ScalarProperty Name="CBM" ColumnName="CBM" />
+                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="Shipper" ColumnName="Shipper" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

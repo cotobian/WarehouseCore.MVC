@@ -1,7 +1,11 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using WarehouseCore.MVC.Enums;
 using WarehouseCore.MVC.Models;
 
 namespace WarehouseCore.MVC.Controllers
@@ -28,5 +32,56 @@ namespace WarehouseCore.MVC.Controllers
             if (id == 0) return View(new Function());
             else return View(await db.Jobs.Where(c => c.Id == id).FirstOrDefaultAsync());
         }
+
+        [HttpGet]
+        public async Task<JsonResult> CreateInboundJobByBooking(int bookingid)
+        {
+            List<int> PoIds = db.POs.Where(c => c.BookingId == bookingid).Select(c => c.Id).ToList();
+            foreach (int id in PoIds)
+            {
+                Job job = new Job();
+                job.POsId = id;
+                job.DateCreated = DateTime.Now;
+                job.UserCreated = int.Parse(Session["id"].ToString());
+                job.JobType = (int?)JobType.Inbound;
+                job.Status = 0;
+                db.Jobs.Add(job);
+            }
+            await db.SaveChangesAsync();
+            return Json(new { success = true, message = "Cập nhật dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> CreateInboundJobByPO(int id)
+        {
+            Job job = new Job();
+            job.POsId = id;
+            job.DateCreated = DateTime.Now;
+            job.UserCreated = int.Parse(Session["id"].ToString());
+            job.JobType = (int?)JobType.Inbound;
+            job.Status = 0;
+            db.Jobs.Add(job);
+            await db.SaveChangesAsync();
+            return Json(new { success = true, message = "Cập nhật dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> CreateOutboundJobByPO(string POSO)
+        {
+            Job job = new Job();
+            POSO = POSO.ToLower().Trim();
+            job.POsId = db.POs.Where(c => c.POSO.ToLower() == POSO.ToLower()).Select(c => c.Id).FirstOrDefault();
+            job.DateCreated = DateTime.Now;
+            job.UserCreated = int.Parse(Session["id"].ToString());
+            job.JobType = (int?)JobType.Outbound;
+            job.Status = 0;
+            db.Jobs.Add(job);
+            await db.SaveChangesAsync();
+            return Json(new { success = true, message = "Cập nhật dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CreateJobsFromExcel(HttpPostedFileBase file)
+        { return Json(new { data = "" }, JsonRequestBehavior.AllowGet); }
     }
 }

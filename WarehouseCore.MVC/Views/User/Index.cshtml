@@ -94,6 +94,14 @@
                             className: "success"
                         })
                     }
+                    else {
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalUser: "top center",
+                            className: "error"
+                        })
+                    }
                 }
             });
             return false;

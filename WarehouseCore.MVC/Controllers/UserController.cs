@@ -4,13 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using WarehouseCore.MVC.Models;
-using WarehouseCore.MVC.ViewModels;
 
 namespace WarehouseCore.MVC.Controllers
 {
     public class UserController : BaseController<User>
     {
-        // GET: User
         public ActionResult Index()
         {
             return View();

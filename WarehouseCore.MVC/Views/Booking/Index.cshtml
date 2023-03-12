@@ -24,6 +24,7 @@
                         <th>Consignee</th>
                         <th>Destination</th>
                         <th>Chi tiết</th>
+                        <th>In</th>
                         <th>Sửa</th>
                         <th>Xóa</th>
                     </tr>
@@ -87,6 +88,15 @@
                     },
                     {
                         "data": "Id", "render": function (data) {
+                            return "<i class='fa fa-print f-20 text-success' onclick=Print('" + data + "')><i />";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "10px",
+                        "className": 'text-center'
+                    },
+                    {
+                        "data": "Id", "render": function (data) {
                             return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "Booking")/" + data + "')><i />";
                         },
                         "orderable": false,
@@ -122,8 +132,6 @@
             });
         });
 
-        
-
         $('#btnSubmit').click(function () {
             var formData = new FormData();
             formData.append('file', $('#file')[0].files[0]);
@@ -141,6 +149,24 @@
                 }
             });
         });
+
+        function Print(id) {
+            $.ajax({
+                type: "GET",
+                url: "/Booking/PrintPNK?id=" + id,
+                contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                xhrFields: { responseType: 'blob' },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = 'PNK.xlsx';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                }
+            });
+            return false;
+        }
 
         function PopupForm(url) {
             var formDiv = $('<div />');
@@ -178,6 +204,14 @@
                             className: "success"
                         })
                     }
+                    else {
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalBooking: "top center",
+                            className: "error"
+                        })
+                    }
                 }
             });
             return false;
@@ -194,6 +228,13 @@
                             $.notify(data.message, {
                                 globalBooking: "top center",
                                 className: "success"
+                            })
+                        }
+                        else {
+                            dataTable.ajax.reload();
+                            $.notify(data.message, {
+                                globalBooking: "top center",
+                                className: "failure"
                             })
                         }
                     }

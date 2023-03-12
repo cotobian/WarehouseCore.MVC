@@ -74,5 +74,32 @@ namespace WarehouseCore.MVC.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob1");
         }
+    
+        public virtual ObjectResult<WH_GetPOById_Result> WH_GetPOById(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOById_Result>("WH_GetPOById", idParameter);
+        }
+    
+        public virtual ObjectResult<WH_GetPOById_Result> WH_GetPOById1(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOById_Result>("WH_GetPOById1", idParameter);
+        }
+    
+        public virtual ObjectResult<WH_GetPOById_Result> WH_GetPOById2(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOById_Result>("WH_GetPOById2", idParameter);
+        }
     }
 }

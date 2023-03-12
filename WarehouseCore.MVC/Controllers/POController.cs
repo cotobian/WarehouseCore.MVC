@@ -1,13 +1,21 @@
-﻿using System.Data.Entity;
+﻿using OfficeOpenXml;
+using OfficeOpenXml.Drawing;
+using System;
+using System.Data.Entity;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using WarehouseCore.MVC.Helpers;
 using WarehouseCore.MVC.Models;
 
 namespace WarehouseCore.MVC.Controllers
 {
     public class POController : BaseController<POs>
     {
+        private BarcodeCreator barcode = new BarcodeCreator();
+
         public ActionResult Index(int bookingid)
         {
             return View(db.Bookings.Where(c => c.Id.Equals(bookingid)).FirstOrDefault());
@@ -37,6 +45,33 @@ namespace WarehouseCore.MVC.Controllers
                 return View(p);
             }
             else return View(await db.POs.Where(c => c.Id == id).FirstOrDefaultAsync());
+        }
+
+        [HttpGet]
+        public ActionResult PrintPalletSheet(int id)
+        {
+            string templatePath = "~/Forms/PalletSheet.xlsx";
+            FileInfo file = new FileInfo(templatePath);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage(templatePath))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets["PalletSheet"];
+                WH_GetPOById_Result po = db.WH_GetPOById(id).FirstOrDefault();
+                worksheet.Cells[3, 7].Value = po.Destination;
+                worksheet.Cells[4, 7].Value = po.Shipper;
+                worksheet.Cells[4, 9].Value = po.Consignee;
+                worksheet.Cells[5, 7].Value = po.Shipment;
+
+                Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 50, 50);
+                MemoryStream stream = new MemoryStream();
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                ExcelPicture barcodeimg = worksheet.Drawings.AddPicture("Barcode", stream);
+                barcodeimg.SetPosition(100, 100);
+                barcodeimg.SetSize(bitmap.Width, bitmap.Height);
+                byte[] fileContents = package.GetAsByteArray();
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PalletSheet.xlsx");
+            }
         }
     }
 }

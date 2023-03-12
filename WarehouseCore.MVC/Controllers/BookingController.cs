@@ -1,6 +1,9 @@
-﻿using System;
+﻿using OfficeOpenXml;
+using OfficeOpenXml.Drawing;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +17,8 @@ namespace WarehouseCore.MVC.Controllers
 {
     public class BookingController : BaseController<Booking>
     {
+        private BarcodeCreator barcode = new BarcodeCreator();
+
         // GET: Bookings
         public ActionResult Index()
         {
@@ -58,7 +63,7 @@ namespace WarehouseCore.MVC.Controllers
                 ParserVm parseResult = pdfparser.BookingParser(_path);
                 Booking booking = parseResult.booking;
                 db.Bookings.Add(booking);
-                foreach(POs po in parseResult.posList)
+                foreach (POs po in parseResult.posList)
                 {
                     po.BookingId = booking.Id;
                     db.POs.Add(po);
@@ -68,9 +73,40 @@ namespace WarehouseCore.MVC.Controllers
                 //tra ve trang chi tiet
                 return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Json(new { data = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public FileResult PrintPNK(int id)
+        {
+            string templatePath = Server.MapPath("~/Forms/PNK.xlsx");
+            FileInfo file = new FileInfo(templatePath);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (ExcelPackage package = new ExcelPackage(file))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets["PNK"];
+                Booking booking = db.Bookings.Where(c => c.Id == id).FirstOrDefault();
+                worksheet.Cells[4, 4].Value = booking.CargoReceiptNumber;
+                worksheet.Cells[4, 10].Value = booking.Date;
+                worksheet.Cells[11, 2].Value = booking.Shipment;
+                List<POs> pos = db.POs.Where(c => c.BookingId == id && c.Status != -1).ToList();
+                int start = 11;
+                foreach (POs p in pos)
+                {
+                    worksheet.Cells[start, 7].Value = p.POSO;
+                    start++;
+                }
+                Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 50, 50);
+                MemoryStream stream = new MemoryStream();
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                ExcelPicture barcodeimg = worksheet.Drawings.AddPicture("Barcode", stream);
+                barcodeimg.SetPosition(100, 100);
+                barcodeimg.SetSize(bitmap.Width, bitmap.Height);
+                byte[] fileContents = package.GetAsByteArray();
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PNK.xlsx");
             }
         }
     }
