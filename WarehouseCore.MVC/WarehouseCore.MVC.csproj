@@ -57,14 +57,8 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPPlus, Version=6.1.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.6.1.3\lib\net35\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="EPPlus.Interfaces, Version=6.1.1.0, Culture=neutral, PublicKeyToken=a694d7f3b0907a61, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.Interfaces.6.1.1\lib\net35\EPPlus.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="EPPlus.System.Drawing, Version=6.1.1.0, Culture=neutral, PublicKeyToken=2308d35469c9bac0, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.System.Drawing.6.1.1\lib\net35\EPPlus.System.Drawing.dll</HintPath>
+    <Reference Include="EPPlus, Version=6.1.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.6.1.1\lib\net35\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.7.6.105\lib\net45\FluentValidation.dll</HintPath>
@@ -83,6 +77,10 @@
     </Reference>
     <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.0.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.0.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -105,16 +103,10 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Primitives, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ComponentModel.Primitives.4.3.0\lib\net45\System.ComponentModel.Primitives.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -201,6 +193,7 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\POController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Enums\ActionMethod.cs" />
@@ -245,6 +238,11 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Validator\BookingValidator.cs" />
+    <Compile Include="Models\Validator\FunctionValidator.cs" />
+    <Compile Include="Models\Validator\JobValidator.cs" />
+    <Compile Include="Models\Validator\PositionValidator.cs" />
+    <Compile Include="Models\Validator\POValidator.cs" />
     <Compile Include="Models\Validator\UniqueValidator.cs" />
     <Compile Include="Models\Validator\UserValidator.cs" />
     <Compile Include="Models\WarehouseCore.Context.cs">
@@ -271,11 +269,10 @@
     <Compile Include="Models\WH_GetPOByBooking_Result.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\WH_GetPOById_Result.cs">
-      <DependentUpon>WarehouseCore.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\WH_GetPOById_Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ChangePasswordVm.cs" />
+    <Compile Include="ViewModels\InventoryVm.cs" />
     <Compile Include="ViewModels\JobVm.cs" />
     <Compile Include="ViewModels\LoginVm.cs" />
     <Compile Include="ViewModels\ParserVm.cs" />
@@ -2215,9 +2212,6 @@
     <Content Include="Content\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="Content\vendor\jquery\jquery.min.map" />
     <Content Include="Content\vendor\jquery\jquery.slim.min.map" />
-    <Content Include="Forms\PalletSheet.xlsx" />
-    <Content Include="Forms\PNK.xlsx" />
-    <Content Include="libman.json" />
     <None Include="Scripts\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.0.js" />
     <Content Include="Scripts\jquery-2.0.0.min.js" />
@@ -2264,10 +2258,12 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Job\AddOrEdit.cshtml" />
+    <Content Include="Views\Report\DeliveryReport.cshtml" />
+    <Content Include="Views\Report\InventoryReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ExportedFiles\" />
+    <Folder Include="Forms\" />
     <Folder Include="UploadFiles\" />
   </ItemGroup>
   <ItemGroup>
