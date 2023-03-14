@@ -9,8 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using WarehouseCore.MVC.Enums;
 using WarehouseCore.MVC.Helpers;
 using WarehouseCore.MVC.Models;
+using WarehouseCore.MVC.Models.Validator;
 using WarehouseCore.MVC.ViewModels;
 
 namespace WarehouseCore.MVC.Controllers
@@ -36,6 +38,36 @@ namespace WarehouseCore.MVC.Controllers
         {
             if (id == 0) return View(new Booking());
             else return View(await db.Bookings.Where(c => c.Id == id).FirstOrDefaultAsync());
+        }
+
+        [HttpPost]
+        public new async Task<JsonResult> AddOrEdit(Booking con)
+        {
+            try
+            {
+                if (con.Id == 0)
+                {
+                    BookingValidator validator = new BookingValidator(ActionMethod.Create, db.Bookings.ToList());
+                    var result = validator.Validate(con);
+                    if (!result.IsValid) throw new Exception(result.Errors[0].ErrorMessage);
+                    con.CargoReceiptNumber = CreateCargoReceiptNumber();
+                    con.Date = DateTime.Now;
+                    db.Bookings.Add(con);
+                }
+                else
+                {
+                    BookingValidator validator = new BookingValidator(ActionMethod.Update, db.Bookings.ToList());
+                    var result = validator.Validate(con);
+                    if (!result.IsValid) throw new Exception(result.Errors[0].ErrorMessage);
+                    db.Entry(con).State = EntityState.Modified;
+                }
+                await db.SaveChangesAsync();
+                return Json(new { success = true, message = "Cập nhật dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
@@ -108,6 +140,14 @@ namespace WarehouseCore.MVC.Controllers
                 byte[] fileContents = package.GetAsByteArray();
                 return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PNK.xlsx");
             }
+        }
+
+        private string CreateCargoReceiptNumber()
+        {
+            string number = "CRN/";
+            int current_number = db.Bookings.Where(c => c.Date == DateTime.Now).Count();
+            number += DateTime.Now.ToString("ddMMyy") + "/" + (current_number + 1).ToString("000");
+            return number;
         }
     }
 }

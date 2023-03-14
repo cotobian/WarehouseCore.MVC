@@ -1,11 +1,15 @@
-﻿using System;
+﻿using FluentValidation;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using WarehouseCore.MVC.Enums;
 
 namespace WarehouseCore.MVC.Models.Validator
 {
-    public class PositionValidator
+    public class PositionValidator : AbstractValidator<Position>
     {
+        public PositionValidator(ActionMethod method, IEnumerable<Position> positions)
+        {
+            RuleFor(x => x.PositionName).NotEmpty().WithMessage("PositionName không thể để trống!");
+            RuleFor(x => x.PositionName).MaximumLength(50).WithMessage("PositionName không thể dài hơn 50 ký tự!");
+        }
     }
 }

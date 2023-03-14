@@ -243,6 +243,7 @@
     <Compile Include="Models\Validator\JobValidator.cs" />
     <Compile Include="Models\Validator\PositionValidator.cs" />
     <Compile Include="Models\Validator\POValidator.cs" />
+    <Compile Include="Models\Validator\RoleValidator.cs" />
     <Compile Include="Models\Validator\UniqueValidator.cs" />
     <Compile Include="Models\Validator\UserValidator.cs" />
     <Compile Include="Models\WarehouseCore.Context.cs">
@@ -2263,6 +2264,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Forms\" />
     <Folder Include="UploadFiles\" />
   </ItemGroup>
   <ItemGroup>

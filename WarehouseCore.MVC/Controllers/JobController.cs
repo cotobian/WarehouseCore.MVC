@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -82,6 +83,42 @@ namespace WarehouseCore.MVC.Controllers
 
         [HttpPost]
         public async Task<JsonResult> CreateJobsFromExcel(HttpPostedFileBase file)
-        { return Json(new { data = "" }, JsonRequestBehavior.AllowGet); }
+        {
+            try
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    using (ExcelPackage package = new ExcelPackage())
+                    {
+                        var workbook = package.Workbook;
+                        var worksheet = workbook.Worksheets[1];
+                        var usedRange = worksheet.Dimension;
+                        for (int i = usedRange.Start.Row; i <= usedRange.End.Row; i++)
+                        {
+                            string shipment = worksheet.Cells[i, usedRange.Start.Column].Value.ToString();
+                            int bookingid = db.Bookings.Where(c => c.Shipment.Equals(shipment)).Select(c => c.Id).FirstOrDefault();
+                            foreach (POs po in db.POs.Where(c => c.BookingId == bookingid).ToList())
+                            {
+                                Job job = new Job();
+                                job.JobType = (int?)JobType.Outbound;
+                                job.POsId = po.Id;
+                                job.PositionId = po.PositionId;
+                                job.DateCreated = DateTime.Now;
+                                job.UserCreated = int.Parse(Session["Id"].ToString());
+                                job.Status = 0;
+                                db.Jobs.Add(job);
+                            }
+                        }
+                        await db.SaveChangesAsync();
+                    }
+                }
+                return Json(new { success = true, data = "" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
