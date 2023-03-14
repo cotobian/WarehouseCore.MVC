@@ -30,5 +30,6 @@ namespace WarehouseCore.MVC.Models
         public string CompleteDateText { get; set; }
         public string UserCreateName { get; set; }
         public string UserCompleteName { get; set; }
+        public string Shipment { get; set; }
     }
 }

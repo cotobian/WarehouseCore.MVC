@@ -187,6 +187,7 @@
           <FunctionImport Name="WH_GetPOById2" ReturnType="Collection(WarehouseModel.WH_GetPOById_Result)">
             <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="WH_GetAllJob2" ReturnType="Collection(WarehouseModel.WH_GetAllJob_Result)" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -256,6 +257,7 @@
           <Property Type="String" Name="CompleteDateText" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="UserCreateName" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="UserCompleteName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Shipment" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="WH_GetAllPO_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -637,6 +639,30 @@
                 <ScalarProperty Name="Consignee" ColumnName="Consignee" />
                 <ScalarProperty Name="Shipper" ColumnName="Shipper" />
                 <ScalarProperty Name="Destination" ColumnName="Destination" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetAllJob2" FunctionName="WarehouseModel.Store.WH_GetAllJob">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetAllJob_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="POsId" ColumnName="POsId" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="UserCompleted" ColumnName="UserCompleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="JobTypeText" ColumnName="JobTypeText" />
+                <ScalarProperty Name="CreateDateText" ColumnName="CreateDateText" />
+                <ScalarProperty Name="CompleteDateText" ColumnName="CompleteDateText" />
+                <ScalarProperty Name="UserCreateName" ColumnName="UserCreateName" />
+                <ScalarProperty Name="UserCompleteName" ColumnName="UserCompleteName" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

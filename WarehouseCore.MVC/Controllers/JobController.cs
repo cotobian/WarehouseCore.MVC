@@ -37,19 +37,31 @@ namespace WarehouseCore.MVC.Controllers
         [HttpGet]
         public async Task<JsonResult> CreateInboundJobByBooking(int bookingid)
         {
-            List<int> PoIds = db.POs.Where(c => c.BookingId == bookingid).Select(c => c.Id).ToList();
-            foreach (int id in PoIds)
+            try
             {
-                Job job = new Job();
-                job.POsId = id;
-                job.DateCreated = DateTime.Now;
-                job.UserCreated = int.Parse(Session["id"].ToString());
-                job.JobType = (int?)JobType.Inbound;
-                job.Status = 0;
-                db.Jobs.Add(job);
+                List<int> PoIds = db.POs.Where(c => c.BookingId == bookingid).Select(c => c.Id).ToList();
+                foreach (int id in PoIds)
+                {
+                    if (!db.Jobs.Where(c => c.POsId == id && c.JobType == 1 && c.Status != -1).Any())
+                    {
+                        Job job = new Job();
+                        job.POsId = id;
+                        job.DateCreated = DateTime.Now;
+                        job.UserCreated = int.Parse(Session["id"].ToString());
+                        job.JobType = (int?)JobType.Inbound;
+                        job.Status = 0;
+                        db.Jobs.Add(job);
+                    }
+                }
+                int jobsCreated = await db.SaveChangesAsync();
+                if (jobsCreated > 0)
+                    return Json(new { success = true, message = "Cập nhật dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
+                else return Json(new { success = false, message = "Không tạo được job" }, JsonRequestBehavior.AllowGet);
             }
-            await db.SaveChangesAsync();
-            return Json(new { success = true, message = "Cập nhật dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpGet]
@@ -60,21 +72,6 @@ namespace WarehouseCore.MVC.Controllers
             job.DateCreated = DateTime.Now;
             job.UserCreated = int.Parse(Session["id"].ToString());
             job.JobType = (int?)JobType.Inbound;
-            job.Status = 0;
-            db.Jobs.Add(job);
-            await db.SaveChangesAsync();
-            return Json(new { success = true, message = "Cập nhật dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public async Task<JsonResult> CreateOutboundJobByPO(string POSO)
-        {
-            Job job = new Job();
-            POSO = POSO.ToLower().Trim();
-            job.POsId = db.POs.Where(c => c.POSO.ToLower() == POSO.ToLower()).Select(c => c.Id).FirstOrDefault();
-            job.DateCreated = DateTime.Now;
-            job.UserCreated = int.Parse(Session["id"].ToString());
-            job.JobType = (int?)JobType.Outbound;
             job.Status = 0;
             db.Jobs.Add(job);
             await db.SaveChangesAsync();
@@ -113,7 +110,7 @@ namespace WarehouseCore.MVC.Controllers
                         await db.SaveChangesAsync();
                     }
                 }
-                return Json(new { success = true, data = "" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

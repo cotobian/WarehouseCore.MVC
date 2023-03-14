@@ -50,24 +50,24 @@ namespace WarehouseCore.MVC.Controllers
         [HttpGet]
         public ActionResult PrintPalletSheet(int id)
         {
-            string templatePath = "~/Forms/PalletSheet.xlsx";
+            string templatePath = Server.MapPath("~/Forms/PalletSheet.xlsx");
             FileInfo file = new FileInfo(templatePath);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (var package = new ExcelPackage(templatePath))
             {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets["PalletSheet"];
+                ExcelWorksheet worksheet = package.Workbook.Worksheets["PLT Sheet"];
                 WH_GetPOById_Result po = db.WH_GetPOById(id).FirstOrDefault();
                 worksheet.Cells[3, 7].Value = po.Destination;
                 worksheet.Cells[4, 7].Value = po.Shipper;
                 worksheet.Cells[4, 9].Value = po.Consignee;
                 worksheet.Cells[5, 7].Value = po.Shipment;
-
-                Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 50, 50);
+                worksheet.Cells[6, 7].Value = po.POSO;
+                Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 550, 200);
                 MemoryStream stream = new MemoryStream();
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                 ExcelPicture barcodeimg = worksheet.Drawings.AddPicture("Barcode", stream);
-                barcodeimg.SetPosition(100, 100);
+                barcodeimg.SetPosition(750, 20);
                 barcodeimg.SetSize(bitmap.Width, bitmap.Height);
                 byte[] fileContents = package.GetAsByteArray();
                 return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PalletSheet.xlsx");

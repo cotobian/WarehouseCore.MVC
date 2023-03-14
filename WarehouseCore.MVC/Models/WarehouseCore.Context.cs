@@ -101,5 +101,10 @@ namespace WarehouseCore.MVC.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOById_Result>("WH_GetPOById2", idParameter);
         }
+    
+        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob2()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob2");
+        }
     }
 }

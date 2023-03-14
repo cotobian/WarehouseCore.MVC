@@ -15,7 +15,8 @@ namespace WarehouseCore.MVC.Helpers
                 {
                     Height = height,
                     Width = width,
-                    Margin = 0
+                    Margin = 0,
+                    PureBarcode = true
                 }
             };
             var bitmap = writer.Write(content);

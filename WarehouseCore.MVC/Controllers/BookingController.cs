@@ -78,7 +78,6 @@ namespace WarehouseCore.MVC.Controllers
                 string _FileName = "";
                 string _path = "";
 
-                //ghi file vao thu muc upload
                 if (file.ContentLength > 0)
                 {
                     Path.GetFileName(file.FileName);
@@ -90,7 +89,6 @@ namespace WarehouseCore.MVC.Controllers
                     return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
                 }
 
-                //parser file pdf
                 PdfParser pdfparser = new PdfParser();
                 ParserVm parseResult = pdfparser.BookingParser(_path);
                 Booking booking = parseResult.booking;
@@ -131,11 +129,11 @@ namespace WarehouseCore.MVC.Controllers
                     worksheet.Cells[start, 7].Value = p.POSO;
                     start++;
                 }
-                Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 50, 50);
+                Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 250, 100);
                 MemoryStream stream = new MemoryStream();
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                 ExcelPicture barcodeimg = worksheet.Drawings.AddPicture("Barcode", stream);
-                barcodeimg.SetPosition(100, 100);
+                barcodeimg.SetPosition(150, 0);
                 barcodeimg.SetSize(bitmap.Width, bitmap.Height);
                 byte[] fileContents = package.GetAsByteArray();
                 return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PNK.xlsx");
