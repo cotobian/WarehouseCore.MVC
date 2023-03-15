@@ -267,10 +267,19 @@
     <Compile Include="Models\WH_GetAllPO_Result.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\WH_GetDeliveryJobByDate_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\WH_GetPOByBooking_Result.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WH_GetPOById_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WH_GetStockPosition_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WH_StackByConsignee_Result.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2217,6 +2226,7 @@
     <Content Include="Content\vendor\jquery\jquery.slim.min.map" />
     <Content Include="Forms\PalletSheet.xlsx" />
     <Content Include="Forms\PNK.xlsx" />
+    <Content Include="Forms\Position.xlsx" />
     <None Include="Scripts\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.0.js" />
     <Content Include="Scripts\jquery-2.0.0.min.js" />

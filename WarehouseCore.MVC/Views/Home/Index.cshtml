@@ -1,7 +1,118 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="container-fluid">
+    <h2>Dashboard</h2>
+    <div class="row">
+        <div class="col-xl-5 col-md-5 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h4 class="m-0 font-weight-bold text-primary">Thống kê vị trí kho</h4>
+                </div>
+                <div class="card-body chart-body">
+                    <div class="chart-area">
+                        <canvas id="myPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-7 col-md-7 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h4 class="m-0 font-weight-bold text-primary">Tồn kho theo khách hàng</h4>
+                </div>
+                <div class="card-body chart-body">
+                    <div class="chart-area">
+                        <canvas id="diabanChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        $('.header').height($(window).height());
 
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Report/getWarehouseLaden",
+                type: "GET",
+                success: function (response) {
+                    var ctx = document.getElementById("myPieChart");
+                    Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ["Số vị trí sử dụng", "Số vị trí trống"],
+                            datasets: [{
+                                data: [response.data.sovitrisudung, response.data.sovitri - response.data.sovitrisudung],
+                                backgroundColor: [
+                                    '#4e73df',
+                                    '#1cc88a'
+                                ],
+                                borderColor: [
+                                    '#2e59d9',
+                                    '#17a673'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            tooltips: {
+                                backgroundColor: "rgb(255,255,255)",
+                                bodyFontColor: "#858796",
+                                borderColor: '#dddfeb',
+                                borderWidth: 1,
+                                xPadding: 15,
+                                yPadding: 15,
+                                displayColors: false,
+                                caretPadding: 10,
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            cutoutPercentage: 0,
+                        },
+                    });
+                }
+            });
+
+            $.ajax({
+                url: "/Report/GetStockByCustomer",
+                type: "GET",
+                success: function (response) {
+                    var consignee = [], quantity = [];
+                    for (i = 0; i < response.data.length; i++) {
+                        consignee.push(response.data[i].consignee);
+                        quantity.push(response.data[i].quantity);
+                    }
+                    Chart(document.getElementById("diabanChart"), {
+                        type: 'bar',
+                        data: {
+                            labels: consignee,
+                            datasets: [
+                                {
+                                    label: "Số carton",
+                                    backgroundColor: "#f38b4a",
+                                    data: quantity
+                                }
+                            ]
+                        },
+                        options: {
+                            legend: { display: false },
+                            title: {
+                                display: false,
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

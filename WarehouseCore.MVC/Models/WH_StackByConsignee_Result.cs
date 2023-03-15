@@ -10,12 +10,10 @@
 namespace WarehouseCore.MVC.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Position
+    public partial class WH_StackByConsignee_Result
     {
-        public int Id { get; set; }
-        public string PositionName { get; set; }
-        public int Status { get; set; }
+        public Nullable<int> Column1 { get; set; }
+        public string Consignee { get; set; }
     }
 }
