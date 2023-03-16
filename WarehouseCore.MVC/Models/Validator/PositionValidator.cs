@@ -10,6 +10,10 @@ namespace WarehouseCore.MVC.Models.Validator
         {
             RuleFor(x => x.PositionName).NotEmpty().WithMessage("PositionName không thể để trống!");
             RuleFor(x => x.PositionName).MaximumLength(50).WithMessage("PositionName không thể dài hơn 50 ký tự!");
+            if (method == ActionMethod.Create)
+            {
+                RuleFor(x => x.PositionName).SetValidator(new UniqueValidator<Position>(positions)).WithMessage("PositionName đã tồn tại");
+            }
         }
     }
 }

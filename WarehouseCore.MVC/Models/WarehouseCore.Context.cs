@@ -106,5 +106,54 @@ namespace WarehouseCore.MVC.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob2");
         }
+    
+        public virtual ObjectResult<WH_GetDeliveryJobByDate_Result> WH_GetDeliveryJobByDate(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
+        {
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetDeliveryJobByDate_Result>("WH_GetDeliveryJobByDate", startDateParameter, endDateParameter);
+        }
+    
+        public virtual ObjectResult<WH_GetDeliveryJobByDate_Result> WH_GetDeliveryJobByDate1(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
+        {
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetDeliveryJobByDate_Result>("WH_GetDeliveryJobByDate1", startDateParameter, endDateParameter);
+        }
+    
+        public virtual ObjectResult<WH_GetDeliveryJobByDate_Result> WH_GetDeliveryJobByDate2(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
+        {
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetDeliveryJobByDate_Result>("WH_GetDeliveryJobByDate2", startDateParameter, endDateParameter);
+        }
+    
+        public virtual ObjectResult<WH_GetStockPosition_Result> WH_GetStockPosition()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetStockPosition_Result>("WH_GetStockPosition");
+        }
+    
+        public virtual ObjectResult<WH_StackByConsignee_Result> WH_StackByConsignee()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_StackByConsignee_Result>("WH_StackByConsignee");
+        }
     }
 }

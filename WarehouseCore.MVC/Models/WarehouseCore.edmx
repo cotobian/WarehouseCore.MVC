@@ -81,7 +81,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PositionName" Type="varchar" MaxLength="50" />
-          <Property Name="Status" Type="int" />
+          <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -108,12 +108,18 @@
         <Function Name="Admin_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="WH_GetAllJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="WH_GetAllPO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="WH_GetDeliveryJobByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StartDate" Type="date" Mode="In" />
+          <Parameter Name="EndDate" Type="date" Mode="In" />
+        </Function>
         <Function Name="WH_GetPOByBooking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="bookingid" Type="int" Mode="In" />
         </Function>
         <Function Name="WH_GetPOById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
+        <Function Name="WH_GetStockPosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="WH_StackByConsignee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="WarehouseModelStoreContainer">
           <EntitySet Name="Bookings" EntityType="Self.Bookings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Functions" EntityType="Self.Functions" Schema="dbo" store:Type="Tables" />
@@ -179,15 +185,29 @@
           <EntitySet Name="Bookings" EntityType="WarehouseModel.Booking" />
           <EntitySet Name="POs" EntityType="WarehouseModel.POs" />
           <FunctionImport Name="WH_GetPOById" ReturnType="Collection(WarehouseModel.WH_GetPOById_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WH_GetPOById1" ReturnType="Collection(WarehouseModel.WH_GetPOById_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WH_GetPOById2" ReturnType="Collection(WarehouseModel.WH_GetPOById_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WH_GetAllJob2" ReturnType="Collection(WarehouseModel.WH_GetAllJob_Result)" />
+          <FunctionImport Name="WH_GetDeliveryJobByDate" ReturnType="Collection(WarehouseModel.WH_GetDeliveryJobByDate_Result)">
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="WH_GetDeliveryJobByDate1" ReturnType="Collection(WarehouseModel.WH_GetDeliveryJobByDate_Result)">
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="WH_GetDeliveryJobByDate2" ReturnType="Collection(WarehouseModel.WH_GetDeliveryJobByDate_Result)">
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="WH_GetStockPosition" ReturnType="Collection(WarehouseModel.WH_GetStockPosition_Result)" />
+          <FunctionImport Name="WH_StackByConsignee" ReturnType="Collection(WarehouseModel.WH_StackByConsignee_Result)" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -204,7 +224,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="Int32" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
         <ComplexType Name="Admin_User_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -349,6 +369,30 @@
           <Property Type="String" Name="Consignee" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Shipper" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Destination" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="WH_GetDeliveryJobByDate_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="JobType" Nullable="true" />
+          <Property Type="Int32" Name="POsId" Nullable="true" />
+          <Property Type="Int32" Name="PositionId" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="DateCompleted" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UserCreated" Nullable="true" />
+          <Property Type="Int32" Name="UserCompleted" Nullable="true" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="String" Name="Shipment" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="POSO" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DateCompletedText" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="WH_GetStockPosition_Result">
+          <Property Type="Int32" Name="sovitri" Nullable="true" />
+          <Property Type="Int32" Name="sovitrisudung" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="WH_StackByConsignee_Result">
+          <Property Type="Int32" Name="Column1" Nullable="true" />
+          <Property Type="String" Name="Consignee" Nullable="true" MaxLength="200" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -663,6 +707,79 @@
                 <ScalarProperty Name="UserCreateName" ColumnName="UserCreateName" />
                 <ScalarProperty Name="UserCompleteName" ColumnName="UserCompleteName" />
                 <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetDeliveryJobByDate" FunctionName="WarehouseModel.Store.WH_GetDeliveryJobByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetDeliveryJobByDate_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="POsId" ColumnName="POsId" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="UserCompleted" ColumnName="UserCompleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetDeliveryJobByDate1" FunctionName="WarehouseModel.Store.WH_GetDeliveryJobByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetDeliveryJobByDate_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="POsId" ColumnName="POsId" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="UserCompleted" ColumnName="UserCompleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetDeliveryJobByDate2" FunctionName="WarehouseModel.Store.WH_GetDeliveryJobByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetDeliveryJobByDate_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="POsId" ColumnName="POsId" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="UserCompleted" ColumnName="UserCompleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="POSO" ColumnName="POSO" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="DateCompletedText" ColumnName="DateCompletedText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetStockPosition" FunctionName="WarehouseModel.Store.WH_GetStockPosition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetStockPosition_Result">
+                <ScalarProperty Name="sovitri" ColumnName="sovitri" />
+                <ScalarProperty Name="sovitrisudung" ColumnName="sovitrisudung" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_StackByConsignee" FunctionName="WarehouseModel.Store.WH_StackByConsignee">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_StackByConsignee_Result">
+                <ScalarProperty Name="Column1" ColumnName="Column1" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
