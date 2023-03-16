@@ -20,17 +20,16 @@ namespace WarehouseCore.MVC.Controllers
 
         public JsonResult GetJob()
         {
-            var list = db.WH_GetAllJob().ToList();
+            var list = db.WH_GetAllJob().ToList().OrderBy(c => c.Id);
             return Json(new { data = list }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public async Task<ActionResult> AddOrEdit(int id = 0)
         {
-            ViewBag.PoList = await db.POs.Where(c => c.Status != -1).ToListAsync();
-            ViewBag.PositionList = await db.Positions.Where(c => c.Status != -1).ToListAsync();
-            ViewBag.UserList = await db.Users.Where(c => c.Status != -1).ToListAsync();
-            if (id == 0) return View(new Function());
+            ViewBag.PoList = await db.POs.Where(c => c.Status == 1).Select(c => new { c.Id, c.POSO }).ToListAsync();
+            ViewBag.PositionList = await db.Positions.Where(c => c.Status != -1).Select(c => new { c.Id, c.PositionName }).ToListAsync();
+            if (id == 0) return View(new Job());
             else return View(await db.Jobs.Where(c => c.Id == id).FirstOrDefaultAsync());
         }
 
@@ -86,31 +85,37 @@ namespace WarehouseCore.MVC.Controllers
                 if (file != null && file.ContentLength > 0)
                 {
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                    using (ExcelPackage package = new ExcelPackage())
+                    using (ExcelPackage package = new ExcelPackage(file.InputStream))
                     {
                         var workbook = package.Workbook;
-                        var worksheet = workbook.Worksheets[1];
+                        var worksheet = workbook.Worksheets["Sheet1"];
                         var usedRange = worksheet.Dimension;
                         for (int i = usedRange.Start.Row; i <= usedRange.End.Row; i++)
                         {
-                            string shipment = worksheet.Cells[i, usedRange.Start.Column].Value.ToString();
-                            int bookingid = db.Bookings.Where(c => c.Shipment.Equals(shipment)).Select(c => c.Id).FirstOrDefault();
-                            foreach (POs po in db.POs.Where(c => c.BookingId == bookingid).ToList())
+                            string shipment = worksheet.Cells[i, 1].Value.ToString();
+                            int? bookingid = db.Bookings.Where(c => c.Shipment.Equals(shipment)).Select(c => c.Id).FirstOrDefault();
+                            if (bookingid != null)
                             {
-                                Job job = new Job();
-                                job.JobType = (int?)JobType.Outbound;
-                                job.POsId = po.Id;
-                                job.PositionId = po.PositionId;
-                                job.DateCreated = DateTime.Now;
-                                job.UserCreated = int.Parse(Session["Id"].ToString());
-                                job.Status = 0;
-                                db.Jobs.Add(job);
+                                foreach (POs po in db.POs.Where(c => c.BookingId == bookingid).ToList())
+                                {
+                                    if (!db.Jobs.Where(c => c.JobType == 2 && c.POsId == po.Id && c.Status != -1).Any())
+                                    {
+                                        Job job = new Job();
+                                        job.JobType = (int?)JobType.Outbound;
+                                        job.POsId = po.Id;
+                                        job.PositionId = po.PositionId;
+                                        job.DateCreated = DateTime.Now;
+                                        job.UserCreated = int.Parse(Session["Id"].ToString());
+                                        job.Status = 0;
+                                        db.Jobs.Add(job);
+                                    }
+                                }
                             }
                         }
                         await db.SaveChangesAsync();
                     }
                 }
-                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, message = "Tạo job xuất thành công" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

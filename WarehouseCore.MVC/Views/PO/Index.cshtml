@@ -1,11 +1,11 @@
 ﻿@model WarehouseCore.MVC.Models.Booking
 @{
-    ViewBag.Title = "Booking Details";
+    ViewBag.Title = "Chi tiết Booking";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="card">
     <div class="card-header">
-        <h3>Booking Details</h3>
+        <h3>Chi tiết Booking</h3>
     </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -85,7 +85,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3>PO List</h3>
+        <h3>Danh sách PO</h3>
     </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -132,7 +132,7 @@
                     { "data": "PositionName" },
                     {
                         "data": "Id", "render": function (data) {
-                            return "<i class='fa fa-pencil f-18 text-success' onclick=Print(" + data + ")><i />";
+                            return "<i class='fa fa-print f-18 text-success' onclick=Print(" + data + ")><i />";
                         },
                         "orderable": false,
                         "searchable": false,
@@ -171,7 +171,6 @@
                             globalBooking: "top center",
                             className: "success"
                         });
-                        $('#btnCreateJob').remove();
                     }
                     else {
                         $.notify(data.message, {

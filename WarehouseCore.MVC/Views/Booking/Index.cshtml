@@ -1,11 +1,11 @@
 ﻿@{
-    ViewBag.Title = "Booking Confirms";
+    ViewBag.Title = "Danh sách Booking";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="card">
     <div class="card-header">
-        <h3>Booking Confirms</h3>
+        <h3>Danh sách Booking</h3>
     </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -22,7 +22,6 @@
                         <th>Consol</th>
                         <th>Shipper</th>
                         <th>Consignee</th>
-                        <th>Destination</th>
                         <th>Chi tiết</th>
                         <th>In</th>
                         <th>Sửa</th>
@@ -46,6 +45,7 @@
                 '<th>Gross Weight</th>' +
                 '<th>Actual CBM</th>' +
                 '<th>Cargo Recipt No</th>' +
+                '<th>Destination</th>' +
                 '<th>Ngày</th>' +
                 '<tr>' +
                 '<td>' + d.Pkg + '</td>' +
@@ -53,6 +53,7 @@
                 '<td>' + d.GWeight + '</td>' +
                 '<td>' + d.ActualCBM + '</td>' +
                 '<td>' + d.CargoReceiptNumber + '</td>' +
+                '<td>' + d.Destination + '</td>' +
                 '<td>' + d.Date + '</td>' +
                 '</tr>' +
                 '</table>';
@@ -69,6 +70,8 @@
                     {
                         "className": 'details-control',
                         "orderable": false,
+                        "targets": 0,
+                        "bSortable": false,
                         "data": null,
                         "defaultContent": ''
                     },
@@ -76,7 +79,6 @@
                     { "data": "Consol" },
                     { "data": "Shipper" },
                     { "data": "Consignee" },
-                    { "data": "Destination" },
                     {
                         "data": "Id", "render": function (data) {
                             return "<i class='fa fa-info-circle f-20 text-success' onclick=Detail('" + data + "')><i />";

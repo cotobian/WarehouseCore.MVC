@@ -1,14 +1,14 @@
-﻿@model WarehouseCore.MVC.ViewModels.JobVm
+﻿@model WarehouseCore.MVC.Models.Job
 @{
     Layout = null;
 }
 
 @using (Html.BeginForm("AddOrEdit", "Job", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
 {
-    @Html.HiddenFor(model => model.job.Id)
+    @Html.HiddenFor(model => model.Id)
     <div class="form-group">
-        <label class="control-label">Shipment:</label>
-        @Html.LabelFor(model => model.Shipment, new { htmlAttributes = new { @class = "form-label" } })
+        <label class="control-label">Số PO:</label>
+        @Html.DropDownListFor(model => model.POsId, new SelectList(ViewBag.PoList, "Id", "POSO"), "--Chọn số PO--", new { @class = "form-control" })
     </div>
     <div class="form-group">
         <input type="submit" value="Cập nhật" class="btn btn-primary" />
