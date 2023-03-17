@@ -50,6 +50,13 @@ namespace WarehouseCore.MVC.Helpers
             string shipment_line = lines.FirstOrDefault(l => l.StartsWith("SHIPMENT"));
             string shipment = shipment_line.Replace("SHIPMENT", "").Trim();
 
+            //tim destination
+            string destination_line = lines.FirstOrDefault(l => l.Contains("VNHPH"));
+            int vnIndex = destination_line.IndexOf("VNHPH");
+            destination_line = destination_line.Substring(vnIndex);
+            string[] parts = destination_line.Split(' ');
+            string destination = parts[1];
+
             //tim shipper
             string shipper_line = lines.FirstOrDefault(l => l.StartsWith("SHIPPER"));
             string shipper = shipper_line.Replace("SHIPPER", "").Trim();
@@ -65,6 +72,7 @@ namespace WarehouseCore.MVC.Helpers
             parser.booking.Consol = "";
             parser.booking.Shipper = shipper;
             parser.booking.Consignee = consignee;
+            parser.booking.Destination = destination;
 
             //gan du lieu POs
             foreach (string pos in po)
