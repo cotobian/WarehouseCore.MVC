@@ -129,7 +129,21 @@
         }
 
         function CreateExcel() {
-
+            $.ajax({
+                type: "GET",
+                url: "/Position/PrintPosition",
+                contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                xhrFields: { responseType: 'blob' },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = 'Position.xlsx';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                }
+            });
+            return false;
         }
     </script>
 }

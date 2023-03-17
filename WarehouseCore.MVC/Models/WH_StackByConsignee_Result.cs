@@ -13,7 +13,7 @@ namespace WarehouseCore.MVC.Models
     
     public partial class WH_StackByConsignee_Result
     {
-        public Nullable<int> Column1 { get; set; }
         public string Consignee { get; set; }
+        public Nullable<int> Quantity { get; set; }
     }
 }

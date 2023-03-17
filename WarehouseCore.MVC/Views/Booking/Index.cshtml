@@ -144,9 +144,27 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
-
+                    if (data.success) {
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalBooking: "top center",
+                            className: "success"
+                        })
+                    }
+                    else {
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalBooking: "top center",
+                            className: "success"
+                        })
+                    }
                 },
-                error: function (xhr, status, error) {
+                error: function (data) {
+                    dataTable.ajax.reload();
+                    $.notify(data.message, {
+                        globalBooking: "top center",
+                        className: "error"
+                    })
 
                 }
             });

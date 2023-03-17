@@ -38,24 +38,25 @@ namespace WarehouseCore.MVC.Controllers
         [HttpGet]
         public ActionResult PrintPosition()
         {
-            string templatePath = Server.MapPath("~/Forms/PalletSheet.xlsx");
+            string templatePath = Server.MapPath("~/Forms/Position.xlsx");
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (var package = new ExcelPackage(templatePath))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets["Sheet1"];
-                List<Position> polist = db.Positions.ToList();
+                List<Position> polist = db.Positions.Where(c => c.Status != -1).ToList();
                 for (int i = 0; i < polist.Count; i++)
                 {
-                    Bitmap bitmap = barcode.GenerateBarcode(polist[i].PositionName.ToString(), ZXing.BarcodeFormat.CODE_128, 550, 200);
+                    worksheet.Cells[5 * i + 1, 1].Value = polist[i].PositionName.ToString();
+                    Bitmap bitmap = barcode.GenerateBarcode(polist[i].PositionName.ToString(), ZXing.BarcodeFormat.CODE_128, 170, 80);
                     MemoryStream stream = new MemoryStream();
                     bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                    ExcelPicture barcodeimg = worksheet.Drawings.AddPicture("Barcode", stream);
-                    barcodeimg.SetPosition(750, 20);
+                    ExcelPicture barcodeimg = worksheet.Drawings.AddPicture("Barcode" + i.ToString(), stream);
+                    barcodeimg.SetPosition(i * 100, 120);
                     barcodeimg.SetSize(bitmap.Width, bitmap.Height);
                 }
                 byte[] fileContents = package.GetAsByteArray();
-                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PalletSheet.xlsx");
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Position.xlsx");
             }
         }
     }

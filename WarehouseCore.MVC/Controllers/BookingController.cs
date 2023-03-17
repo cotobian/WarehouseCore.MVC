@@ -75,24 +75,26 @@ namespace WarehouseCore.MVC.Controllers
         {
             try
             {
-                string _FileName = "";
-                string _path = "";
+                //string _FileName = "";
+                //string _path = "";
 
-                if (file.ContentLength > 0)
-                {
-                    Path.GetFileName(file.FileName);
-                    Path.Combine(Server.MapPath("~/UploadFiles"), _FileName);
-                    file.SaveAs(_path);
-                }
-                else
-                {
-                    return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
-                }
+                //if (file.ContentLength > 0)
+                //{
+                //    Path.GetFileName(file.FileName);
+                //    _path = Path.Combine(Server.MapPath("~/UploadFiles"), _FileName);
+                //    file.SaveAs(_path);
+                //}
+                //else
+                //{
+                //    throw new Exception("File rỗng không thể import!");
+                //}
 
                 PdfParser pdfparser = new PdfParser();
-                ParserVm parseResult = pdfparser.BookingParser(_path);
+                ParserVm parseResult = pdfparser.BookingParser(file);
                 Booking booking = parseResult.booking;
+                booking.CargoReceiptNumber = CreateCargoReceiptNumber();
                 db.Bookings.Add(booking);
+                await db.SaveChangesAsync();
                 foreach (POs po in parseResult.posList)
                 {
                     po.BookingId = booking.Id;
@@ -101,11 +103,11 @@ namespace WarehouseCore.MVC.Controllers
                 await db.SaveChangesAsync();
 
                 //tra ve trang chi tiet
-                return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Thêm Booking thành công" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { data = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -127,6 +129,9 @@ namespace WarehouseCore.MVC.Controllers
                 foreach (POs p in pos)
                 {
                     worksheet.Cells[start, 7].Value = p.POSO;
+                    worksheet.Cells[start, 9].Value = p.Dimension;
+                    worksheet.Cells[start, 11].Value = p.CBM;
+                    worksheet.Cells[start, 12].Value = p.GWeight;
                     start++;
                 }
                 Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 250, 100);

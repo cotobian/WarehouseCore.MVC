@@ -155,5 +155,10 @@ namespace WarehouseCore.MVC.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_StackByConsignee_Result>("WH_StackByConsignee");
         }
+    
+        public virtual ObjectResult<WH_StackByConsignee_Result> WH_StackByConsignee1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_StackByConsignee_Result>("WH_StackByConsignee1");
+        }
     }
 }

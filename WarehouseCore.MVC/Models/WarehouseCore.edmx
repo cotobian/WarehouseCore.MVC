@@ -208,6 +208,7 @@
           </FunctionImport>
           <FunctionImport Name="WH_GetStockPosition" ReturnType="Collection(WarehouseModel.WH_GetStockPosition_Result)" />
           <FunctionImport Name="WH_StackByConsignee" ReturnType="Collection(WarehouseModel.WH_StackByConsignee_Result)" />
+          <FunctionImport Name="WH_StackByConsignee1" ReturnType="Collection(WarehouseModel.WH_StackByConsignee_Result)" />
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -391,8 +392,8 @@
           <Property Type="Int32" Name="sovitrisudung" Nullable="true" />
         </ComplexType>
         <ComplexType Name="WH_StackByConsignee_Result">
-          <Property Type="Int32" Name="Column1" Nullable="true" />
           <Property Type="String" Name="Consignee" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -778,8 +779,15 @@
           <FunctionImportMapping FunctionImportName="WH_StackByConsignee" FunctionName="WarehouseModel.Store.WH_StackByConsignee">
             <ResultMapping>
               <ComplexTypeMapping TypeName="WarehouseModel.WH_StackByConsignee_Result">
-                <ScalarProperty Name="Column1" ColumnName="Column1" />
                 <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="WH_StackByConsignee1" FunctionName="WarehouseModel.Store.WH_StackByConsignee">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_StackByConsignee_Result">
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
