@@ -12,17 +12,14 @@ namespace WarehouseCore.MVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class POs
+    public partial class Pallet
     {
         public int Id { get; set; }
-        public Nullable<int> BookingId { get; set; }
-        public string POSO { get; set; }
+        public int BookingId { get; set; }
+        public int PositionId { get; set; }
         public Nullable<int> Quantity { get; set; }
-        public string Unit { get; set; }
-        public string Dimension { get; set; }
-        public Nullable<decimal> CBM { get; set; }
-        public Nullable<decimal> GWeight { get; set; }
-        public Nullable<int> PositionId { get; set; }
         public int Status { get; set; }
+        public string POSO { get; set; }
+        public string Unit { get; set; }
     }
 }

@@ -24,21 +24,8 @@ namespace WarehouseCore.MVC.Controllers
 
         public async Task<JsonResult> GetInventoryReport()
         {
-            var inventory = await (from po in db.POs
-                                   join b in db.Bookings on po.BookingId equals b.Id
-                                   join p in db.Positions on po.PositionId equals p.Id
-                                   where po.Status == 1
-                                   select new { po.POSO, po.Unit, po.Quantity, po.PositionId, b.Shipment, p.PositionName }).ToListAsync();
-            List<InventoryVm> inventoryVms = inventory.Select(e => new InventoryVm
-            {
-                Shipment = e.Shipment,
-                POSO = e.POSO,
-                PositionName = e.PositionName,
-                Unit = e.Unit,
-                PositionId = (int)e.PositionId,
-                Quantity = (int)e.Quantity
-            }).ToList();
-            return Json(new { data = inventoryVms }, JsonRequestBehavior.AllowGet);
+            var inventory = "";
+            return Json(new { data = inventory }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDeliveryReport(string startDate, string endDate)
@@ -57,7 +44,8 @@ namespace WarehouseCore.MVC.Controllers
 
         public JsonResult getWarehouseLaden()
         {
-            List<WH_GetStockPosition_Result> res = db.WH_GetStockPosition().ToList();
+            //List<WH_GetStockPosition_Result> res = db.WH_GetStockPosition().ToList();
+            var res = "";
             return Json(new { data = res }, JsonRequestBehavior.AllowGet);
         }
     }

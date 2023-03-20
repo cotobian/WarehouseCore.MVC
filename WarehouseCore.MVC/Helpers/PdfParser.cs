@@ -14,9 +14,9 @@ namespace WarehouseCore.MVC.Helpers
 {
     public class PdfParser
     {
-        public ParserVm BookingParser(HttpPostedFileBase file)
+        public Booking BookingParser(HttpPostedFileBase file)
         {
-            ParserVm parser = new ParserVm();
+            Booking booking = new Booking();
             byte[] pdfbytes = null;
             BinaryReader rdr = new BinaryReader(file.InputStream);
             pdfbytes = rdr.ReadBytes((int)file.ContentLength);
@@ -35,15 +35,14 @@ namespace WarehouseCore.MVC.Helpers
 
             //parse booking
             PdfReader reader = new PdfReader(pdfbytes);
-            //PdfReader reader = new PdfReader(filePath);
             int numPages = reader.NumberOfPages;
-            string booking = "";
+            string booking1 = "";
             for (int pageNum = 1; pageNum <= numPages; pageNum++)
             {
                 string text = PdfTextExtractor.GetTextFromPage(reader, pageNum);
-                booking = booking + text;
+                booking1 = booking1 + text;
             }
-            string[] lines = booking.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            string[] lines = booking1.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
             string booking_confirmation_line = lines.FirstOrDefault(l => l.StartsWith("Booking"));
             int booking_line_index = Array.IndexOf(lines, booking_confirmation_line);
@@ -87,33 +86,19 @@ namespace WarehouseCore.MVC.Helpers
             string dimension = dimensions_parts[dimensions_len - 5].ToString();
 
             //gan du lieu Bookings
-            parser.booking = new Booking();
-            parser.posList = new List<POs>();
-            parser.booking.Shipment = shipment;
-            parser.booking.Consol = consol;
-            parser.booking.Shipper = shipper;
-            parser.booking.Consignee = consignee;
-            parser.booking.Destination = destination;
-            parser.booking.Status = 0;
+            booking = new Booking();
+            booking.Shipment = shipment;
+            booking.Consol = consol;
+            booking.Shipper = shipper;
+            booking.Consignee = consignee;
+            booking.Destination = destination;
+            booking.GWeight = GWeight;
+            booking.ActualCBM = CBM;
+            booking.Unit = Unit;
+            booking.Pkg = Quantity;
+            booking.Status = 0;
 
-            //gan du lieu POs
-            foreach (string pos in po)
-            {
-                if (pos != "SHIPPER'S REFERENCE")
-                {
-                    POs poi = new POs();
-                    poi.POSO = pos;
-                    poi.Unit = Unit;
-                    poi.Quantity = Quantity;
-                    poi.Status = 0;
-                    poi.CBM = CBM;
-                    poi.GWeight = GWeight;
-                    poi.Dimension = dimension;
-                    parser.posList.Add(poi);
-                }
-            }
-
-            return parser;
+            return booking;
         }
     }
 }

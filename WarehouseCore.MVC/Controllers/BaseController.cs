@@ -11,7 +11,7 @@ using WarehouseCore.MVC.Models;
 
 namespace WarehouseCore.MVC.Controllers
 {
-    public class BaseController<T> : Controller where T : class
+    public abstract class BaseController<T> : Controller where T : class
     {
         public WarehouseEntities db = new WarehouseEntities();
 
@@ -56,7 +56,7 @@ namespace WarehouseCore.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> AddOrEdit(T con)
+        public virtual async Task<JsonResult> AddOrEdit(T con)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace WarehouseCore.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Delete(int id)
+        public virtual async Task<JsonResult> Delete(int id)
         {
             try
             {

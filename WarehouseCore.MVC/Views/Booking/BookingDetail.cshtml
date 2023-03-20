@@ -76,7 +76,7 @@
                     <strong>Date:</strong>
                 </div>
                 <div class="col-md-4 col-lg-4 label">
-                    @Model.Date
+                    @Model.Date.Value.ToString("dd/MM/yyyy")
                 </div>
             </div>
         </div>
@@ -85,22 +85,22 @@
 
 <div class="card">
     <div class="card-header">
-        <h3>Danh sách PO</h3>
+        <h3>Danh sách Pallet</h3>
     </div>
     <div class="card-body">
         <div class="container-fluid">
-            <a class="btn btn-success" style="margin-bottom:10px;" onclick="AddNewPopUp()"><i class="fa fa-plus"></i> Thêm mới</a>
-            <a class="btn btn-primary" style="margin-bottom:10px;" onclick="CreateJob()" id="btnCreateJob"><i class="fa fa-tasks"></i> Tạo job</a>
+            <label class="control-label">Số Pallet</label>
+            <input type="number" class="form-control" id="palletNo" min="0" step="1" style="display:inline" />
+            <a class="btn btn-primary" style="margin-bottom:10px;" onclick="CreateJob()" id="btnCreateJob"><i class="fa fa-tasks"></i> Tạo pallet</a>
             <table id="truckTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>PO/SO</th>
-                        <th>Quantity</th>
-                        <th>Unit</th>
-                        <th>Dimension</th>
-                        <th>CBM</th>
-                        <th>G.Weight</th>
+                        <th>Shipment</th>
+                        <th>Số PO</th>
+                        <th>Đơn vị</th>
+                        <th>Số lượng</th>
                         <th>Vị trí</th>
+                        <th>Trạng thái</th>
                         <th>In</th>
                         <th>Sửa</th>
                         <th>Xóa</th>
@@ -115,7 +115,7 @@
     <script>
         var Popup, dataTable;
         $(document).ready(function () {
-            let url = "/PO/GetPOByBooking?Id=" + @Model.Id;
+            let url = "/Pallet/GetPalletByBooking?bookingid=" + @Model.Id;
             dataTable = $("#truckTable").DataTable({
                 "ajax": {
                     "url": url,
@@ -123,13 +123,12 @@
                     "datatype": "json",
                 },
                 "columns": [
+                    { "data": "Shipment" },
                     { "data": "POSO" },
-                    { "data": "Quantity" },
                     { "data": "Unit" },
-                    { "data": "Dimension" },
-                    { "data": "CBM" },
-                    { "data": "GWeight" },
+                    { "data": "Quantity" },
                     { "data": "PositionName" },
+                    { "data": "StatusText" },
                     {
                         "data": "Id", "render": function (data) {
                             return "<i class='fa fa-print f-18 text-success' onclick=Print(" + data + ")><i />";
@@ -141,7 +140,7 @@
                     },
                     {
                         "data": "Id", "render": function (data) {
-                            return "<i class='fa fa-pencil f-18 text-success' onclick=EditPopUp(" + data + ")><i />";
+                            return "<i class='fa fa-pencil f-18 text-success' onclick=PopupForm('@Url.Action("AddOrEdit", "Pallet")/" + data + "')><i />";
                         },
                         "orderable": false,
                         "searchable": false,
@@ -162,11 +161,19 @@
         });
 
         function CreateJob() {
+            if ($('#jobNo').val() == '') {
+                $.notify("Hãy nhập số pallet cần tạo!", {
+                    globalBooking: "top center",
+                    className: "error"
+                });
+                return;
+            }
             $.ajax({
                 type: "GET",
-                url: "/Job/CreateInboundJobByBooking?bookingid=" + @Model.Id,
+                url: "/Pallet/CreatePalletByBooking?bookingid=" + @Model.Id + "&palletNo=" + $('#palletNo').val(),
                 success: function (data) {
                     if (data.success) {
+                        dataTable.ajax.reload();
                         $.notify(data.message, {
                             globalBooking: "top center",
                             className: "success"
@@ -183,50 +190,22 @@
             return false;
         }
 
-        function AddNewPopUp() {
-            let url = "/PO/AddOrEdit?bookingid=" + @Model.Id;
-            PopupForm(url);
-        }
-
-        function EditPopUp(id) {
-            let url = "/PO/AddOrEdit?bookingid=" + @Model.Id + "&id=" + id;
-            PopupForm(url);
-        }
-
-        function Print(id) {
-            $.ajax({
-                type: "GET",
-                url: "/PO/PrintPalletSheet?id=" + id,
-                contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                xhrFields: { responseType: 'blob' },
-                success: function (data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = 'PalletSheet.xlsx';
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                }
-            });
-            return false;
-        }
-
         function PopupForm(url) {
             var formDiv = $('<div />');
             $.get(url)
-            .done(function (response) {
-                formDiv.html(response);
-                Popup = formDiv.dialog({
-                    autoOpen: true,
-                    resizeable: false,
-                    title: 'Nhập thông tin PO',
-                    height: 480,
-                    width: 600,
-                    close: function () {
-                        Popup.dialog('destroy').remove();
-                    }
+                .done(function (response) {
+                    formDiv.html(response);
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizeable: false,
+                        title: 'Sửa thông tin Pallet',
+                        height: 420,
+                        width: 400,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        }
+                    });
                 });
-            });
         }
 
         function SubmitForm(form) {
@@ -243,16 +222,42 @@
                             className: "success"
                         })
                     }
+                    else {
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalBooking: "top center",
+                            className: "error"
+                        })
+                    }
+                }
+            });
+            return false;
+        }
+
+        function Print(id) {
+            $.ajax({
+                type: "GET",
+                url: "/Pallet/PrintPalletSheet?id=" + id,
+                contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                xhrFields: { responseType: 'blob' },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = 'PalletSheet.xlsx';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
                 }
             });
             return false;
         }
 
         function Delete(id) {
-            if (confirm("Bạn có muốn xóa PO này không?")) {
+            if (confirm("Bạn có muốn xóa Pallet này không?")) {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Delete", "PO")/' + id,
+                    url: '@Url.Action("Delete", "Pallet")/' + id,
                     success: function (data) {
                         if (data.success) {
                             dataTable.ajax.reload();

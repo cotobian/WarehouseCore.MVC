@@ -27,9 +27,14 @@ namespace WarehouseCore.MVC.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetBooking()
+        public ActionResult BookingDetail(int bookingid)
         {
-            List<Booking> booking = await db.Bookings.Where(c => c.Status != -1).ToListAsync();
+            return View(db.Bookings.Find(bookingid));
+        }
+
+        public JsonResult GetBooking()
+        {
+            List<WH_GetAllBooking_Result> booking = db.WH_GetAllBooking().ToList();
             return Json(new { data = booking }, JsonRequestBehavior.AllowGet);
         }
 
@@ -75,31 +80,11 @@ namespace WarehouseCore.MVC.Controllers
         {
             try
             {
-                //string _FileName = "";
-                //string _path = "";
-
-                //if (file.ContentLength > 0)
-                //{
-                //    Path.GetFileName(file.FileName);
-                //    _path = Path.Combine(Server.MapPath("~/UploadFiles"), _FileName);
-                //    file.SaveAs(_path);
-                //}
-                //else
-                //{
-                //    throw new Exception("File rỗng không thể import!");
-                //}
-
                 PdfParser pdfparser = new PdfParser();
-                ParserVm parseResult = pdfparser.BookingParser(file);
-                Booking booking = parseResult.booking;
+                Booking booking = pdfparser.BookingParser(file);
                 booking.CargoReceiptNumber = CreateCargoReceiptNumber();
+                booking.Date = DateTime.Now;
                 db.Bookings.Add(booking);
-                await db.SaveChangesAsync();
-                foreach (POs po in parseResult.posList)
-                {
-                    po.BookingId = booking.Id;
-                    db.POs.Add(po);
-                }
                 await db.SaveChangesAsync();
 
                 //tra ve trang chi tiet
@@ -122,18 +107,10 @@ namespace WarehouseCore.MVC.Controllers
                 ExcelWorksheet worksheet = package.Workbook.Worksheets["PNK"];
                 Booking booking = db.Bookings.Where(c => c.Id == id).FirstOrDefault();
                 worksheet.Cells[4, 4].Value = booking.CargoReceiptNumber;
-                worksheet.Cells[4, 10].Value = booking.Date;
+                worksheet.Cells[4, 10].Value = booking.Date.Value.ToString("dd/MM/yyyy");
                 worksheet.Cells[11, 2].Value = booking.Shipment;
-                List<POs> pos = db.POs.Where(c => c.BookingId == id && c.Status != -1).ToList();
-                int start = 11;
-                foreach (POs p in pos)
-                {
-                    worksheet.Cells[start, 7].Value = p.POSO;
-                    worksheet.Cells[start, 9].Value = p.Dimension;
-                    worksheet.Cells[start, 11].Value = p.CBM;
-                    worksheet.Cells[start, 12].Value = p.GWeight;
-                    start++;
-                }
+                worksheet.Cells[7, 10].Value = booking.Consignee;
+                worksheet.Cells[7, 4].Value = booking.Shipper;
                 Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 250, 100);
                 MemoryStream stream = new MemoryStream();
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);

@@ -68,7 +68,6 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    Popup.dialog('close');
                     dataTable.ajax.reload();
                     $.notify(data.message, {
                         globalJob: "top center",
@@ -76,7 +75,6 @@
                     })
                 },
                 error: function (data) {
-                    Popup.dialog('close');
                     dataTable.ajax.reload();
                     $.notify(data.message, {
                         globalJob: "top center",

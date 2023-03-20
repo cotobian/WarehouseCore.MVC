@@ -54,7 +54,7 @@
                 '<td>' + d.ActualCBM + '</td>' +
                 '<td>' + d.CargoReceiptNumber + '</td>' +
                 '<td>' + d.Destination + '</td>' +
-                '<td>' + d.Date + '</td>' +
+                '<td>' + d.datetext + '</td>' +
                 '</tr>' +
                 '</table>';
         }
@@ -207,7 +207,7 @@
         }
 
         function Detail(id) {
-            window.location.href = "/PO?bookingid=" + id;
+            window.location.href = "/Booking/BookingDetail?bookingid=" + id;
         }
 
         function SubmitForm(form) {

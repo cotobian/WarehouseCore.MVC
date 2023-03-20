@@ -39,80 +39,173 @@
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
 
-        $(document).ready(function () {
-            $.ajax({
-                url: "/Report/getWarehouseLaden",
-                type: "GET",
-                success: function (response) {
-                    var ctx = document.getElementById("myPieChart");
-                    Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: ["Số vị trí sử dụng", "Số vị trí trống"],
-                            datasets: [{
-                                data: [response.data.sovitrisudung, response.data.sovitri - response.data.sovitrisudung],
-                                backgroundColor: [
-                                    '#4e73df',
-                                    '#1cc88a'
-                                ],
-                                borderColor: [
-                                    '#2e59d9',
-                                    '#17a673'
-                                ],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            maintainAspectRatio: false,
-                            tooltips: {
-                                backgroundColor: "rgb(255,255,255)",
-                                bodyFontColor: "#858796",
-                                borderColor: '#dddfeb',
-                                borderWidth: 1,
-                                xPadding: 15,
-                                yPadding: 15,
-                                displayColors: false,
-                                caretPadding: 10,
-                            },
-                            legend: {
-                                position: 'bottom'
-                            },
-                            cutoutPercentage: 0,
-                        },
-                    });
-                }
-            });
+        function createPieChart() {
+            // Get the canvas element
+            const ctx = document.getElementById('myPieChart').getContext('2d');
 
-            $.ajax({
-                url: "/Report/GetStockByCustomer",
-                type: "GET",
-                success: function (response) {
-                    var consignee = [], quantity = [];
-                    for (i = 0; i < response.data.length; i++) {
-                        consignee.push(response.data[i].consignee);
-                        quantity.push(response.data[i].quantity);
-                    }
-                    Chart(document.getElementById("diabanChart"), {
-                        type: 'bar',
-                        data: {
-                            labels: consignee,
-                            datasets: [
-                                {
-                                    label: "Số carton",
-                                    backgroundColor: "#f38b4a",
-                                    data: quantity
-                                }
-                            ]
-                        },
-                        options: {
-                            legend: { display: false },
-                            title: {
-                                display: false,
-                            }
-                        }
-                    });
+            // Define the chart data
+            const data = {
+                labels: ["Số vị trí sử dụng", "Số vị trí trống"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [3, 1],
+                    backgroundColor: [
+                        '#4e73df',
+                        '#1cc88a'
+                    ],
+                    borderColor: [
+                        '#2e59d9',
+                        '#17a673'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            // Create the chart
+            const myChart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        caretPadding: 10,
+                    },
+                    legend: {
+                        position: 'bottom'
+                    },
+                    cutoutPercentage: 0,
                 }
             });
+        }
+
+        function createBarChart() {
+            // Get the canvas element
+            const ctx = document.getElementById('diabanChart').getContext('2d');
+
+            // Define the chart data
+            const data = {
+                labels: ['KMG', 'MSK', 'EVR', 'PIL', 'COS', 'VOS', 'TCL'],
+                datasets: [{
+                    label: 'Số Pallet',
+                    data: [12, 19, 3, 5, 12, 3, 8],
+                    backgroundColor: '#f38b4a',
+                    borderColor: '',
+                    borderWidth: 1
+                }]
+            };
+
+            // Create the chart
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: 'My Bar Chart'
+                        },
+                        labels: {
+                            display: false
+                        }
+
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            createPieChart();
+            createBarChart();
+            //$.ajax({
+            //    url: "/Report/getWarehouseLaden",
+            //    type: "GET",
+            //    success: function (response) {
+            //        var ctx = document.getElementById("myPieChart").getContext('2d');
+            //        var vitrikhoChart = Chart(ctx, {
+            //            type: 'pie',
+            //            data: {
+            //                labels: ["Số vị trí sử dụng", "Số vị trí trống"],
+            //                datasets: [{
+            //                    //data: [response.data[0].sovitrisudung, response.data[0].sovitri - response.data[0].sovitrisudung],
+            //                    data: [3,1],
+            //                    backgroundColor: [
+            //                        '#4e73df',
+            //                        '#1cc88a'
+            //                    ],
+            //                    borderColor: [
+            //                        '#2e59d9',
+            //                        '#17a673'
+            //                    ],
+            //                    borderWidth: 1
+            //                }]
+            //            },
+            //            options: {
+            //                maintainAspectRatio: false,
+            //                tooltips: {
+            //                    backgroundColor: "rgb(255,255,255)",
+            //                    bodyFontColor: "#858796",
+            //                    borderColor: '#dddfeb',
+            //                    borderWidth: 1,
+            //                    xPadding: 15,
+            //                    yPadding: 15,
+            //                    displayColors: false,
+            //                    caretPadding: 10,
+            //                },
+            //                legend: {
+            //                    position: 'bottom'
+            //                },
+            //                cutoutPercentage: 0,
+            //            },
+            //        });
+            //    }
+            //});
+
+            //$.ajax({
+            //    url: "/Report/GetStockByCustomer",
+            //    type: "GET",
+            //    success: function (response) {
+            //        var consignee = [], quantity = [];
+            //        for (i = 0; i < response.data.length; i++) {
+            //            consignee.push(response.data[i].consignee);
+            //            quantity.push(response.data[i].quantity);
+            //        }
+            //        Chart(document.getElementById("diabanChart"), {
+            //            type: 'bar',
+            //            data: {
+            //                labels: consignee,
+            //                datasets: [
+            //                    {
+            //                        label: "Số carton",
+            //                        backgroundColor: "#f38b4a",
+            //                        data: quantity
+            //                    }
+            //                ]
+            //            },
+            //            options: {
+            //                legend: { display: false },
+            //                title: {
+            //                    display: false,
+            //                }
+            //            }
+            //        });
+            //    }
+            //});
         });
     </script>
 }

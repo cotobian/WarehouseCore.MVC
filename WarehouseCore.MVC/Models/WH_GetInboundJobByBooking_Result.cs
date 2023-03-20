@@ -11,20 +11,25 @@ namespace WarehouseCore.MVC.Models
 {
     using System;
     
-    public partial class WH_GetPOByBooking_Result
+    public partial class WH_GetInboundJobByBooking_Result
     {
         public int Id { get; set; }
+        public Nullable<int> JobType { get; set; }
         public Nullable<int> BookingId { get; set; }
+        public Nullable<int> PositionId { get; set; }
         public string POSO { get; set; }
         public Nullable<int> Quantity { get; set; }
         public string Unit { get; set; }
-        public string Dimension { get; set; }
-        public Nullable<decimal> CBM { get; set; }
-        public Nullable<decimal> GWeight { get; set; }
-        public Nullable<int> PositionId { get; set; }
+        public Nullable<int> InboundJobId { get; set; }
+        public Nullable<System.DateTime> DateCreated { get; set; }
+        public Nullable<System.DateTime> DateCompleted { get; set; }
+        public Nullable<int> UserCreated { get; set; }
+        public Nullable<int> UserCompleted { get; set; }
         public Nullable<int> Status { get; set; }
-        public string StatusText { get; set; }
-        public string Shipment { get; set; }
         public string PositionName { get; set; }
+        public string FullName { get; set; }
+        public string Shipment { get; set; }
+        public string StatusText { get; set; }
+        public Nullable<System.DateTime> DateText { get; set; }
     }
 }

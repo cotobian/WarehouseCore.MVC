@@ -27,18 +27,26 @@ namespace WarehouseCore.MVC.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Function> Functions { get; set; }
-        public virtual DbSet<Permission> Permissions { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Position> Positions { get; set; }
-        public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
-        public virtual DbSet<POs> POs { get; set; }
+        public virtual DbSet<Function> Functions { get; set; }
+        public virtual DbSet<Job> Jobs { get; set; }
+        public virtual DbSet<Pallet> Pallets { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<Position> Positions { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     
-        public virtual ObjectResult<Admin_User_Result> Admin_User()
+        public virtual ObjectResult<Nullable<int>> Admin_CheckUserLogin(string username, string password)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin_User_Result>("Admin_User");
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Admin_CheckUserLogin", usernameParameter, passwordParameter);
         }
     
         public virtual ObjectResult<Admin_GetAllFunction_Result> Admin_GetAllFunction()
@@ -46,65 +54,24 @@ namespace WarehouseCore.MVC.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin_GetAllFunction_Result>("Admin_GetAllFunction");
         }
     
-        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob");
-        }
-    
-        public virtual ObjectResult<WH_GetAllPO_Result> WH_GetAllPO()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllPO_Result>("WH_GetAllPO");
-        }
-    
-        public virtual ObjectResult<WH_GetPOByBooking_Result> WH_GetPOByBooking(Nullable<int> bookingid)
-        {
-            var bookingidParameter = bookingid.HasValue ?
-                new ObjectParameter("bookingid", bookingid) :
-                new ObjectParameter("bookingid", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOByBooking_Result>("WH_GetPOByBooking", bookingidParameter);
-        }
-    
         public virtual ObjectResult<Admin_GetAllPermission_Result> Admin_GetAllPermission()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin_GetAllPermission_Result>("Admin_GetAllPermission");
         }
     
-        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob1()
+        public virtual ObjectResult<Admin_User_Result> Admin_User()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob1");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin_User_Result>("Admin_User");
         }
     
-        public virtual ObjectResult<WH_GetPOById_Result> WH_GetPOById(Nullable<int> id)
+        public virtual ObjectResult<WH_GetAllBooking_Result> WH_GetAllBooking()
         {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOById_Result>("WH_GetPOById", idParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllBooking_Result>("WH_GetAllBooking");
         }
     
-        public virtual ObjectResult<WH_GetPOById_Result> WH_GetPOById1(Nullable<int> id)
+        public virtual ObjectResult<string> WH_GetAllOutboundJob()
         {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOById_Result>("WH_GetPOById1", idParameter);
-        }
-    
-        public virtual ObjectResult<WH_GetPOById_Result> WH_GetPOById2(Nullable<int> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPOById_Result>("WH_GetPOById2", idParameter);
-        }
-    
-        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob2()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob2");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("WH_GetAllOutboundJob");
         }
     
         public virtual ObjectResult<WH_GetDeliveryJobByDate_Result> WH_GetDeliveryJobByDate(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
@@ -120,35 +87,18 @@ namespace WarehouseCore.MVC.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetDeliveryJobByDate_Result>("WH_GetDeliveryJobByDate", startDateParameter, endDateParameter);
         }
     
-        public virtual ObjectResult<WH_GetDeliveryJobByDate_Result> WH_GetDeliveryJobByDate1(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
+        public virtual ObjectResult<WH_GetInboundJobByBooking_Result> WH_GetInboundJobByBooking(Nullable<int> bookingid)
         {
-            var startDateParameter = startDate.HasValue ?
-                new ObjectParameter("StartDate", startDate) :
-                new ObjectParameter("StartDate", typeof(System.DateTime));
+            var bookingidParameter = bookingid.HasValue ?
+                new ObjectParameter("bookingid", bookingid) :
+                new ObjectParameter("bookingid", typeof(int));
     
-            var endDateParameter = endDate.HasValue ?
-                new ObjectParameter("EndDate", endDate) :
-                new ObjectParameter("EndDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetDeliveryJobByDate_Result>("WH_GetDeliveryJobByDate1", startDateParameter, endDateParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetInboundJobByBooking_Result>("WH_GetInboundJobByBooking", bookingidParameter);
         }
     
-        public virtual ObjectResult<WH_GetDeliveryJobByDate_Result> WH_GetDeliveryJobByDate2(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
+        public virtual int WH_GetStockPosition()
         {
-            var startDateParameter = startDate.HasValue ?
-                new ObjectParameter("StartDate", startDate) :
-                new ObjectParameter("StartDate", typeof(System.DateTime));
-    
-            var endDateParameter = endDate.HasValue ?
-                new ObjectParameter("EndDate", endDate) :
-                new ObjectParameter("EndDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetDeliveryJobByDate_Result>("WH_GetDeliveryJobByDate2", startDateParameter, endDateParameter);
-        }
-    
-        public virtual ObjectResult<WH_GetStockPosition_Result> WH_GetStockPosition()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetStockPosition_Result>("WH_GetStockPosition");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WH_GetStockPosition");
         }
     
         public virtual ObjectResult<WH_StackByConsignee_Result> WH_StackByConsignee()
@@ -156,9 +106,18 @@ namespace WarehouseCore.MVC.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_StackByConsignee_Result>("WH_StackByConsignee");
         }
     
-        public virtual ObjectResult<WH_StackByConsignee_Result> WH_StackByConsignee1()
+        public virtual ObjectResult<WH_GetPalletByBooking_Result> WH_GetPalletByBooking(Nullable<int> bookingid)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_StackByConsignee_Result>("WH_StackByConsignee1");
+            var bookingidParameter = bookingid.HasValue ?
+                new ObjectParameter("bookingid", bookingid) :
+                new ObjectParameter("bookingid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPalletByBooking_Result>("WH_GetPalletByBooking", bookingidParameter);
+        }
+    
+        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob");
         }
     }
 }

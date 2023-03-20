@@ -11,9 +11,17 @@ namespace WarehouseCore.MVC.Models
 {
     using System;
     
-    public partial class WH_GetStockPosition_Result
+    public partial class WH_GetPalletByBooking_Result
     {
-        public Nullable<int> sovitri { get; set; }
-        public Nullable<int> sovitrisudung { get; set; }
+        public int Id { get; set; }
+        public int BookingId { get; set; }
+        public int PositionId { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public int Status { get; set; }
+        public string POSO { get; set; }
+        public string Unit { get; set; }
+        public string Shipment { get; set; }
+        public string PositionName { get; set; }
+        public string StatusText { get; set; }
     }
 }

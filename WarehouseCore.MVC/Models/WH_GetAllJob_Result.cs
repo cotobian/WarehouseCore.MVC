@@ -15,7 +15,7 @@ namespace WarehouseCore.MVC.Models
     {
         public int Id { get; set; }
         public Nullable<int> JobType { get; set; }
-        public Nullable<int> POsId { get; set; }
+        public Nullable<int> PalletId { get; set; }
         public Nullable<int> PositionId { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateCompleted { get; set; }
@@ -23,13 +23,13 @@ namespace WarehouseCore.MVC.Models
         public Nullable<int> UserCompleted { get; set; }
         public Nullable<int> Status { get; set; }
         public string StatusText { get; set; }
-        public string PositionName { get; set; }
-        public string POSO { get; set; }
         public string JobTypeText { get; set; }
         public string CreateDateText { get; set; }
         public string CompleteDateText { get; set; }
+        public string PositionName { get; set; }
         public string UserCreateName { get; set; }
         public string UserCompleteName { get; set; }
+        public string POSO { get; set; }
         public string Shipment { get; set; }
     }
 }
