@@ -29,5 +29,6 @@ namespace WarehouseCore.MVC.Models
         public string Remark { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> Status { get; set; }
+        public Nullable<System.DateTime> ETD { get; set; }
     }
 }

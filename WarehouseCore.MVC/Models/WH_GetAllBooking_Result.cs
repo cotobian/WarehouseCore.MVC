@@ -29,5 +29,7 @@ namespace WarehouseCore.MVC.Models
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> Status { get; set; }
         public string datetext { get; set; }
+        public Nullable<System.DateTime> ETD { get; set; }
+        public string ETDtext { get; set; }
     }
 }

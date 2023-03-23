@@ -101,6 +101,7 @@
                         <th>Số lượng</th>
                         <th>Vị trí</th>
                         <th>Trạng thái</th>
+                        <th>Ảnh</th>
                         <th>In</th>
                         <th>Sửa</th>
                         <th>Xóa</th>
@@ -132,6 +133,14 @@
                     {
                         "data": "Id", "render": function (data) {
                             return "<i class='fa fa-print f-18 text-success' onclick=Print(" + data + ")><i />";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "10px",
+                        "className": 'text-center'
+                    },{
+                        "data": "Id", "render": function (data) {
+                            return "<i class='fa fa-print f-18 text-success' onclick=Image(" + data + ")><i />";
                         },
                         "orderable": false,
                         "searchable": false,

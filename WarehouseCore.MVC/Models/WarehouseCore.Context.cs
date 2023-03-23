@@ -35,6 +35,7 @@ namespace WarehouseCore.MVC.Models
         public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
     
         public virtual ObjectResult<Nullable<int>> Admin_CheckUserLogin(string username, string password)
         {
@@ -118,6 +119,11 @@ namespace WarehouseCore.MVC.Models
         public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob");
+        }
+    
+        public virtual ObjectResult<WH_GetAllBooking_Result> WH_GetAllBooking1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllBooking_Result>("WH_GetAllBooking1");
         }
     }
 }

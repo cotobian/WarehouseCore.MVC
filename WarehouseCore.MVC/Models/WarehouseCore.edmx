@@ -22,6 +22,7 @@
           <Property Name="ActualCBM" Type="decimal" Precision="18" Scale="3" />
           <Property Name="CargoReceiptNumber" Type="varchar" MaxLength="20" />
           <Property Name="Remark" Type="nvarchar" MaxLength="200" />
+          <Property Name="ETD" Type="datetime" />
           <Property Name="Date" Type="datetime" />
           <Property Name="Status" Type="int" />
         </EntityType>
@@ -36,6 +37,15 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Icon" Type="varchar" MaxLength="50" />
           <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Images">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="varchar" MaxLength="50" />
+          <Property Name="Status" Type="int" />
+          <Property Name="PalletId" Type="int" />
         </EntityType>
         <EntityType Name="Jobs">
           <Key>
@@ -62,6 +72,7 @@
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="POSO" Type="varchar" MaxLength="50" />
           <Property Name="Unit" Type="varchar" MaxLength="20" />
+          <Property Name="CreateDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Permissions">
           <Key>
@@ -125,6 +136,7 @@
         <EntityContainer Name="WarehouseModelStoreContainer">
           <EntitySet Name="Bookings" EntityType="Self.Bookings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Functions" EntityType="Self.Functions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Jobs" EntityType="Self.Jobs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pallets" EntityType="Self.Pallets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
@@ -167,6 +179,8 @@
           <EntitySet Name="Roles" EntityType="WarehouseModel.Role" />
           <EntitySet Name="Users" EntityType="WarehouseModel.User" />
           <FunctionImport Name="WH_GetAllJob" ReturnType="Collection(WarehouseModel.WH_GetAllJob_Result)" />
+          <EntitySet Name="Images" EntityType="WarehouseModel.Image" />
+          <FunctionImport Name="WH_GetAllBooking1" ReturnType="Collection(WarehouseModel.WH_GetAllBooking_Result)" />
         </EntityContainer>
         <ComplexType Name="Admin_GetAllFunction_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -212,6 +226,8 @@
           <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
           <Property Type="Int32" Name="Status" Nullable="true" />
           <Property Type="String" Name="datetext" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="ETD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ETDtext" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="WH_GetDeliveryJobByDate_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -288,6 +304,7 @@
           <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
+          <Property Name="ETD" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Function">
           <Key>
@@ -326,6 +343,7 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="POSO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -384,6 +402,15 @@
           <Property Type="String" Name="POSO" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Shipment" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="PalletId" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -529,6 +556,7 @@
           <EntitySetMapping Name="Bookings">
             <EntityTypeMapping TypeName="WarehouseModel.Booking">
               <MappingFragment StoreEntitySet="Bookings">
+                <ScalarProperty Name="ETD" ColumnName="ETD" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
@@ -578,6 +606,7 @@
           <EntitySetMapping Name="Pallets">
             <EntityTypeMapping TypeName="WarehouseModel.Pallet">
               <MappingFragment StoreEntitySet="Pallets">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="POSO" ColumnName="POSO" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
@@ -650,6 +679,40 @@
                 <ScalarProperty Name="UserCompleteName" ColumnName="UserCompleteName" />
                 <ScalarProperty Name="POSO" ColumnName="POSO" />
                 <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Images">
+            <EntityTypeMapping TypeName="WarehouseModel.Image">
+              <MappingFragment StoreEntitySet="Images">
+                <ScalarProperty Name="PalletId" ColumnName="PalletId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetAllBooking1" FunctionName="WarehouseModel.Store.WH_GetAllBooking">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetAllBooking_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="Consol" ColumnName="Consol" />
+                <ScalarProperty Name="Shipper" ColumnName="Shipper" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="TruckNo" ColumnName="TruckNo" />
+                <ScalarProperty Name="Pkg" ColumnName="Pkg" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
+                <ScalarProperty Name="ActualCBM" ColumnName="ActualCBM" />
+                <ScalarProperty Name="CargoReceiptNumber" ColumnName="CargoReceiptNumber" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="datetext" ColumnName="datetext" />
+                <ScalarProperty Name="ETD" ColumnName="ETD" />
+                <ScalarProperty Name="ETDtext" ColumnName="ETDtext" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -226,6 +226,9 @@
     <Compile Include="Models\Function.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Image.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Job.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
@@ -2277,9 +2280,11 @@
     <Content Include="Views\Booking\BookingDetail.cshtml" />
     <Content Include="Views\Pallet\Index.cshtml" />
     <Content Include="Views\Pallet\AddOrEdit.cshtml" />
+    <Content Include="Views\Pallet\ShowImage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="PalletImages\" />
     <Folder Include="UploadFiles\" />
   </ItemGroup>
   <ItemGroup>

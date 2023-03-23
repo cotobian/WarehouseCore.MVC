@@ -6,7 +6,6 @@ using System.Data.Entity;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using WarehouseCore.MVC.Helpers;
@@ -121,10 +120,10 @@ namespace WarehouseCore.MVC.Controllers
             {
                 Pallet pallet = await db.Pallets.FindAsync(id);
                 pallet.Status = -1;
-                foreach(Job job in db.Jobs.Where(c => c.PalletId == id).ToList())
+                foreach (Job job in db.Jobs.Where(c => c.PalletId == id).ToList())
                 {
                     job.Status = -1;
-                }    
+                }
                 await db.SaveChangesAsync();
                 return Json(new { success = true, message = "Xóa dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
             }
@@ -132,6 +131,13 @@ namespace WarehouseCore.MVC.Controllers
             {
                 return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [HttpGet]
+        public ActionResult ShowImage(int palletid)
+        {
+            List<Models.Image> images = db.Images.Where(c => c.PalletId == palletid && c.Status != -1).ToList();
+            return View(images);
         }
     }
 }

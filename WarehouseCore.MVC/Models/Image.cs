@@ -12,15 +12,11 @@ namespace WarehouseCore.MVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Pallet
+    public partial class Image
     {
         public int Id { get; set; }
-        public int BookingId { get; set; }
-        public int PositionId { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public int Status { get; set; }
-        public string POSO { get; set; }
-        public string Unit { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
+        public string FileName { get; set; }
+        public Nullable<int> Status { get; set; }
+        public Nullable<int> PalletId { get; set; }
     }
 }
