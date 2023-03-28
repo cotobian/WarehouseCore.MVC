@@ -2042,6 +2042,9 @@
       <DependentUpon>WarehouseCore.edmx</DependentUpon>
       <LastGenOutput>WarehouseCore.cs</LastGenOutput>
     </Content>
+    <Content Include="PalletImages\1.png" />
+    <Content Include="PalletImages\2.png" />
+    <Content Include="PalletImages\3.png" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -2280,11 +2283,11 @@
     <Content Include="Views\Booking\BookingDetail.cshtml" />
     <Content Include="Views\Pallet\Index.cshtml" />
     <Content Include="Views\Pallet\AddOrEdit.cshtml" />
-    <Content Include="Views\Pallet\ShowImage.cshtml" />
+    <Content Include="Views\Pallet\PalletImage.cshtml" />
+    <Content Include="Views\Pallet\PalletImages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="PalletImages\" />
     <Folder Include="UploadFiles\" />
   </ItemGroup>
   <ItemGroup>

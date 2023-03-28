@@ -21,14 +21,15 @@ namespace WarehouseCore.MVC.Models
         public string Consignee { get; set; }
         public string Destination { get; set; }
         public string TruckNo { get; set; }
+        public string SealNo { get; set; }
         public Nullable<int> Pkg { get; set; }
         public string Unit { get; set; }
         public Nullable<decimal> GWeight { get; set; }
         public Nullable<decimal> ActualCBM { get; set; }
         public string CargoReceiptNumber { get; set; }
         public string Remark { get; set; }
+        public Nullable<System.DateTime> ETD { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> Status { get; set; }
-        public Nullable<System.DateTime> ETD { get; set; }
     }
 }

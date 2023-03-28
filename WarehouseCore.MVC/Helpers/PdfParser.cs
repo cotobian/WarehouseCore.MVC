@@ -9,6 +9,7 @@ using System.Web;
 using System.IO;
 using System.Collections.Generic;
 using System.Windows.Media.Animation;
+using System.Globalization;
 
 namespace WarehouseCore.MVC.Helpers
 {
@@ -63,6 +64,7 @@ namespace WarehouseCore.MVC.Helpers
             destination_line = destination_line.Substring(vnIndex);
             string[] parts = destination_line.Split(' ');
             string destination = parts[1];
+            DateTime etd = DateTime.ParseExact(parts[3], "dd-MMM-yy", CultureInfo.InvariantCulture);
 
             //tim shipper
             string shipper_line = lines.FirstOrDefault(l => l.StartsWith("SHIPPER"));
@@ -97,7 +99,7 @@ namespace WarehouseCore.MVC.Helpers
             booking.Unit = Unit;
             booking.Pkg = Quantity;
             booking.Status = 0;
-
+            booking.ETD = etd;
             return booking;
         }
     }

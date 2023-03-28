@@ -3,6 +3,8 @@
     ViewBag.Title = "Chi tiết Booking";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@*Chi tiết booking*@
 <div class="card">
     <div class="card-header">
         <h3>Chi tiết Booking</h3>
@@ -83,6 +85,7 @@
     </div>
 </div>
 
+@*Danh sách Pallet trong booking*@
 <div class="card">
     <div class="card-header">
         <h3>Danh sách Pallet</h3>
@@ -132,7 +135,7 @@
                     { "data": "StatusText" },
                     {
                         "data": "Id", "render": function (data) {
-                            return "<i class='fa fa-print f-18 text-success' onclick=Print(" + data + ")><i />";
+                            return "<i class='fa fa-picture-o f-18 text-success' onclick=PopupImage(" + data + ")><i />";
                         },
                         "orderable": false,
                         "searchable": false,
@@ -140,7 +143,7 @@
                         "className": 'text-center'
                     },{
                         "data": "Id", "render": function (data) {
-                            return "<i class='fa fa-print f-18 text-success' onclick=Image(" + data + ")><i />";
+                            return "<i class='fa fa-print f-18 text-success' onclick=Print(" + data + ")><i />";
                         },
                         "orderable": false,
                         "searchable": false,
@@ -169,6 +172,7 @@
             });
         });
 
+        //hàm tạo pallet trong booking
         function CreateJob() {
             if ($('#jobNo').val() == '') {
                 $.notify("Hãy nhập số pallet cần tạo!", {
@@ -199,6 +203,7 @@
             return false;
         }
 
+        //hàm tạo popup sửa thông tin pallet
         function PopupForm(url) {
             var formDiv = $('<div />');
             $.get(url)
@@ -217,6 +222,89 @@
                 });
         }
 
+        //hàm tạo popup image
+        //function PopupImage(data) {
+        //    var formDiv = $('<div />');
+        //    var url = '/Pallet/PalletImages';
+        //    $.get(url)
+        //        .done(function (response) {
+        //            formDiv.html(response);
+        //            Popup = formDiv.dialog({
+        //                autoOpen: true,
+        //                resizeable: false,
+        //                title: 'Ảnh Pallet',
+        //                height: 420,
+        //                width: 600,
+        //                close: function () {
+        //                    Popup.dialog('destroy').remove();
+        //                }
+        //            });
+        //        });
+        //}
+
+        function PopupImage(data) {
+            var formDiv = $('<div />');
+            var url = '/Pallet/PalletImages?palletid=' + data;
+
+            function initCarousel() {
+                var slideIndex = 0;
+                var slides = $(".slide");
+
+                function showSlides() {
+                    slides.removeClass("active");
+                    slides.eq(slideIndex).addClass("active");
+                    slideIndex++;
+                    if (slideIndex >= slides.length) {
+                        slideIndex = 0;
+                    }
+                    setTimeout(showSlides, 5000);
+                }
+
+                showSlides();
+
+                $(".next").click(function () {
+                    slides.removeClass("active");
+                    slideIndex++;
+                    if (slideIndex >= slides.length) {
+                        slideIndex = 0;
+                    }
+                    slides.eq(slideIndex).addClass("active");
+                });
+
+                $(".prev").click(function () {
+                    slides.removeClass("active");
+                    slideIndex--;
+                    if (slideIndex < 0) {
+                        slideIndex = slides.length - 1;
+                    }
+                    slides.eq(slideIndex).addClass("active");
+                });
+            }
+
+            $.get(url).done(function (response) {
+                formDiv.html(response);
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizeable: false,
+                    title: 'Ảnh Pallet',
+                    height: 420,
+                    width: 600,
+                    close: function () {
+                        // Remove dialog content
+                        formDiv.empty();
+                        // Destroy dialog
+                        Popup.dialog('destroy').remove();
+                    },
+                    open: function () {
+                        // Initialize carousel
+                        initCarousel();
+                    }
+                });
+            });
+        }
+
+
+        //hàm submit thông tin từ sửa pallet lên server
         function SubmitForm(form) {
             $.ajax({
                 type: "POST",

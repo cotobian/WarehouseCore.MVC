@@ -46,7 +46,7 @@ namespace WarehouseCore.MVC.Controllers
         }
 
         [HttpPost]
-        public new async Task<JsonResult> AddOrEdit(Booking con)
+        public override async Task<JsonResult> AddOrEdit(Booking con)
         {
             try
             {
@@ -64,6 +64,11 @@ namespace WarehouseCore.MVC.Controllers
                     BookingValidator validator = new BookingValidator(ActionMethod.Update, db.Bookings.ToList());
                     var result = validator.Validate(con);
                     if (!result.IsValid) throw new Exception(result.Errors[0].ErrorMessage);
+                    var existingBooking = db.Bookings.Find(con.Id);
+                    if (existingBooking != null)
+                    {
+                        db.Entry(existingBooking).State = EntityState.Detached;
+                    }
                     db.Entry(con).State = EntityState.Modified;
                 }
                 await db.SaveChangesAsync();
@@ -109,8 +114,13 @@ namespace WarehouseCore.MVC.Controllers
                 worksheet.Cells[4, 4].Value = booking.CargoReceiptNumber;
                 worksheet.Cells[4, 10].Value = booking.Date.Value.ToString("dd/MM/yyyy");
                 worksheet.Cells[11, 2].Value = booking.Shipment;
+                worksheet.Cells[11, 5].Value = booking.Unit;
+                worksheet.Cells[11, 6].Value = booking.Pkg;
+                worksheet.Cells[11, 12].Value = booking.GWeight;
                 worksheet.Cells[7, 10].Value = booking.Consignee;
                 worksheet.Cells[7, 4].Value = booking.Shipper;
+                worksheet.Cells[9, 4].Value = booking.ETD.Value.ToString("dd/MM/yyyy");
+                worksheet.Cells[5, 10].Value = booking.TruckNo;
                 Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 250, 100);
                 MemoryStream stream = new MemoryStream();
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);

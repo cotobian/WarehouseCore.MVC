@@ -27,7 +27,6 @@ namespace WarehouseCore.MVC.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<Function> Functions { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Pallet> Pallets { get; set; }
@@ -36,6 +35,7 @@ namespace WarehouseCore.MVC.Models
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
     
         public virtual ObjectResult<Nullable<int>> Admin_CheckUserLogin(string username, string password)
         {
@@ -124,6 +124,11 @@ namespace WarehouseCore.MVC.Models
         public virtual ObjectResult<WH_GetAllBooking_Result> WH_GetAllBooking1()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllBooking_Result>("WH_GetAllBooking1");
+        }
+    
+        public virtual ObjectResult<WH_GetAllBooking_Result> WH_GetAllBooking2()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllBooking_Result>("WH_GetAllBooking2");
         }
     }
 }

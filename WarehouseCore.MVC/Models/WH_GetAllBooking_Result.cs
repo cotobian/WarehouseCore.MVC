@@ -31,5 +31,6 @@ namespace WarehouseCore.MVC.Models
         public string datetext { get; set; }
         public Nullable<System.DateTime> ETD { get; set; }
         public string ETDtext { get; set; }
+        public string SealNo { get; set; }
     }
 }

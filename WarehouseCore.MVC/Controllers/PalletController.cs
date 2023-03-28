@@ -37,6 +37,7 @@ namespace WarehouseCore.MVC.Controllers
             pallet.POSO = con.POSO;
             pallet.Quantity = con.Quantity;
             pallet.Unit = con.Unit;
+            pallet.CreateDate = DateTime.Now;
             await db.SaveChangesAsync();
             return Json(new { success = true, message = "Cập nhật dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
         }
@@ -72,7 +73,10 @@ namespace WarehouseCore.MVC.Controllers
                 worksheet.Cells[4, 9].Value = booking.Consignee;
                 worksheet.Cells[5, 7].Value = booking.Shipment;
                 worksheet.Cells[6, 7].Value = pallet.POSO;
+                worksheet.Cells[7, 7].Value = pallet.CreateDate == null ? "" : ((DateTime)pallet.CreateDate).ToString("dd/MM/yyyy");
+                worksheet.Cells[8, 7].Value = booking.ETD == null ? "" : ((DateTime)booking.ETD).ToString("dd/MM/yyyy");
                 worksheet.Cells[10, 7].Value = pallet.Quantity;
+                worksheet.Cells[10, 9].Value = booking.Pkg;
                 Bitmap bitmap = barcode.GenerateBarcode(id.ToString(), ZXing.BarcodeFormat.CODE_128, 550, 200);
                 MemoryStream stream = new MemoryStream();
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
@@ -94,6 +98,7 @@ namespace WarehouseCore.MVC.Controllers
                     Pallet pallet = new Pallet();
                     pallet.BookingId = bookingid;
                     pallet.Status = 0;
+                    pallet.CreateDate = DateTime.Now;
                     db.Pallets.Add(pallet);
                     await db.SaveChangesAsync();
                     Job job = new Job();
@@ -134,7 +139,13 @@ namespace WarehouseCore.MVC.Controllers
         }
 
         [HttpGet]
-        public ActionResult ShowImage(int palletid)
+        public ActionResult PalletImage()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult PalletImages(int palletid)
         {
             List<Models.Image> images = db.Images.Where(c => c.PalletId == palletid && c.Status != -1).ToList();
             return View(images);

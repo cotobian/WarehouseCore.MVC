@@ -16,6 +16,7 @@
           <Property Name="Consignee" Type="nvarchar" MaxLength="200" />
           <Property Name="Destination" Type="varchar" MaxLength="200" />
           <Property Name="TruckNo" Type="varchar" MaxLength="20" />
+          <Property Name="SealNo" Type="varchar" MaxLength="20" />
           <Property Name="Pkg" Type="int" />
           <Property Name="Unit" Type="varchar" MaxLength="20" />
           <Property Name="GWeight" Type="decimal" Precision="18" Scale="3" />
@@ -170,7 +171,6 @@
           <FunctionImport Name="WH_GetPalletByBooking" ReturnType="Collection(WarehouseModel.WH_GetPalletByBooking_Result)">
           <Parameter Name="bookingid" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="Bookings" EntityType="WarehouseModel.Booking" />
           <EntitySet Name="Functions" EntityType="WarehouseModel.Function" />
           <EntitySet Name="Jobs" EntityType="WarehouseModel.Job" />
           <EntitySet Name="Pallets" EntityType="WarehouseModel.Pallet" />
@@ -181,6 +181,8 @@
           <FunctionImport Name="WH_GetAllJob" ReturnType="Collection(WarehouseModel.WH_GetAllJob_Result)" />
           <EntitySet Name="Images" EntityType="WarehouseModel.Image" />
           <FunctionImport Name="WH_GetAllBooking1" ReturnType="Collection(WarehouseModel.WH_GetAllBooking_Result)" />
+          <EntitySet Name="Bookings" EntityType="WarehouseModel.Booking" />
+          <FunctionImport Name="WH_GetAllBooking2" ReturnType="Collection(WarehouseModel.WH_GetAllBooking_Result)" />
         </EntityContainer>
         <ComplexType Name="Admin_GetAllFunction_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -228,6 +230,7 @@
           <Property Type="String" Name="datetext" Nullable="true" MaxLength="30" />
           <Property Type="DateTime" Name="ETD" Nullable="true" Precision="23" />
           <Property Type="String" Name="ETDtext" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="SealNo" Nullable="true" MaxLength="20" />
         </ComplexType>
         <ComplexType Name="WH_GetDeliveryJobByDate_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -285,27 +288,6 @@
           <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="StatusText" Nullable="true" MaxLength="8" />
         </ComplexType>
-        <EntityType Name="Booking">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Shipment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Consol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Shipper" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Destination" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="TruckNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Pkg" Type="Int32" />
-          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="GWeight" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="ActualCBM" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="CargoReceiptNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="ETD" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="Function">
           <Key>
             <PropertyRef Name="Id" />
@@ -410,6 +392,28 @@
           <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="Int32" />
           <Property Name="PalletId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Shipment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Consol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Shipper" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Destination" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="TruckNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SealNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Pkg" Type="Int32" />
+          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="GWeight" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="ActualCBM" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="CargoReceiptNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ETD" Type="DateTime" Precision="3" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -553,28 +557,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="Bookings">
-            <EntityTypeMapping TypeName="WarehouseModel.Booking">
-              <MappingFragment StoreEntitySet="Bookings">
-                <ScalarProperty Name="ETD" ColumnName="ETD" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Remark" ColumnName="Remark" />
-                <ScalarProperty Name="CargoReceiptNumber" ColumnName="CargoReceiptNumber" />
-                <ScalarProperty Name="ActualCBM" ColumnName="ActualCBM" />
-                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Pkg" ColumnName="Pkg" />
-                <ScalarProperty Name="TruckNo" ColumnName="TruckNo" />
-                <ScalarProperty Name="Destination" ColumnName="Destination" />
-                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
-                <ScalarProperty Name="Shipper" ColumnName="Shipper" />
-                <ScalarProperty Name="Consol" ColumnName="Consol" />
-                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Functions">
             <EntityTypeMapping TypeName="WarehouseModel.Function">
               <MappingFragment StoreEntitySet="Functions">
@@ -713,6 +695,54 @@
                 <ScalarProperty Name="datetext" ColumnName="datetext" />
                 <ScalarProperty Name="ETD" ColumnName="ETD" />
                 <ScalarProperty Name="ETDtext" ColumnName="ETDtext" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Bookings">
+            <EntityTypeMapping TypeName="WarehouseModel.Booking">
+              <MappingFragment StoreEntitySet="Bookings">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ETD" ColumnName="ETD" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="CargoReceiptNumber" ColumnName="CargoReceiptNumber" />
+                <ScalarProperty Name="ActualCBM" ColumnName="ActualCBM" />
+                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Pkg" ColumnName="Pkg" />
+                <ScalarProperty Name="SealNo" ColumnName="SealNo" />
+                <ScalarProperty Name="TruckNo" ColumnName="TruckNo" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="Shipper" ColumnName="Shipper" />
+                <ScalarProperty Name="Consol" ColumnName="Consol" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="WH_GetAllBooking2" FunctionName="WarehouseModel.Store.WH_GetAllBooking">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.WH_GetAllBooking_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Shipment" ColumnName="Shipment" />
+                <ScalarProperty Name="Consol" ColumnName="Consol" />
+                <ScalarProperty Name="Shipper" ColumnName="Shipper" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="TruckNo" ColumnName="TruckNo" />
+                <ScalarProperty Name="Pkg" ColumnName="Pkg" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="GWeight" ColumnName="GWeight" />
+                <ScalarProperty Name="ActualCBM" ColumnName="ActualCBM" />
+                <ScalarProperty Name="CargoReceiptNumber" ColumnName="CargoReceiptNumber" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="datetext" ColumnName="datetext" />
+                <ScalarProperty Name="ETD" ColumnName="ETD" />
+                <ScalarProperty Name="ETDtext" ColumnName="ETDtext" />
+                <ScalarProperty Name="SealNo" ColumnName="SealNo" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

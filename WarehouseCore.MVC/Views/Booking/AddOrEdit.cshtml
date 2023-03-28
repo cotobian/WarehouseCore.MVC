@@ -6,6 +6,7 @@
 @using (Html.BeginForm("AddOrEdit", "Booking", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
 {
     @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Status)
     <div class="row">
         <div class="form-group col-md-6 col-lg-6">
             <label class="control-label">Shipment</label>
@@ -32,7 +33,7 @@
             @Html.EditorFor(model => model.Destination, new { htmlAttributes = new { @class = "form-control" } })
         </div>
         <div class="form-group col-md-6 col-lg-6">
-            <label class="control-label">TruckNo</label>
+            <label class="control-label">Số xe</label>
             @Html.EditorFor(model => model.TruckNo, new { htmlAttributes = new { @class = "form-control" } })
         </div>
     </div>
@@ -42,32 +43,53 @@
             @Html.EditorFor(model => model.Pkg, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
         </div>
         <div class="form-group col-md-6 col-lg-6">
-            <label class="control-label">Unit</label>
+            <label class="control-label">Đơn vị</label>
             @Html.EditorFor(model => model.Unit, new { htmlAttributes = new { @class = "form-control" } })
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-6 col-lg-6">
-            <label class="control-label">G.Weight</label>
+            <label class="control-label">Gross Weight</label>
             @Html.EditorFor(model => model.GWeight, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
         </div>
         <div class="form-group col-md-6 col-lg-6">
-            <label class="control-label">ActualCBM</label>
+            <label class="control-label">Actual CBM</label>
             @Html.EditorFor(model => model.ActualCBM, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-6 col-lg-6">
-            <label class="control-label">Cargo Receipt No</label>
+            <label class="control-label">Số Nhận hàng</label>
             @Html.EditorFor(model => model.CargoReceiptNumber, new { htmlAttributes = new { @class = "form-control" } })
         </div>
         <div class="form-group col-md-6 col-lg-6">
-            <label class="control-label">Remark</label>
+            <label class="control-label">Ghi chú</label>
             @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
         </div>
     </div>
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Ngày Booking</label>
+            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control datepicker" } })
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">ETD</label>
+            @Html.EditorFor(model => model.ETD, new { htmlAttributes = new { @class = "form-control datepicker" } })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-6">
+            <label class="control-label">Số Seal</label>
+            @Html.EditorFor(model => model.SealNo, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
     <div class="form-group">
         <input type="submit" value="Cập nhật" class="btn btn-primary" />
         <input type="reset" value="Reset" class="btn btn-warning" />
     </div>
 }
+
+<script>
+    $('.datepicker').datepicker({ dateFormat: 'dd/mm/yy' });
+</script>
