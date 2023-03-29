@@ -14,7 +14,7 @@
                 <input type="file" name="file" id="file" style="margin-left: 10px" accept=".pdf" />
                 <input id="btnSubmit" type="button" value="Import Excel" class="btn btn-primary" />
             </form>
-            <a class="btn btn-warning" onclick=""> In CLP</a>
+            <a class="btn btn-warning" onclick="PrintCLP()"> In CLP</a>
             <table id="truckTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
@@ -34,7 +34,7 @@
         </div>
     </div>
 </div>
-<link rel="stylesheet"  href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
 @section scripts{
     <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
     <script>
@@ -280,6 +280,31 @@
                     }
                 });
             }
+        }
+
+        function PrintCLP() {
+            var checkedRows = '';
+            dataTable.rows().every(function () {
+                if ($(this.node()).closest('tr').hasClass('selected')) {
+                    checkedRows += this.data().Id + ";";
+                }
+            });
+            checkedRows = checkedRows.slice(0, -1);
+            $.ajax({
+                type: "GET",
+                url: "/Booking/PrintCLP?ids=" + checkedRows,
+                contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                xhrFields: { responseType: 'blob' },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = 'CLP.xlsx';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                }
+            });
+            return false;
         }
     </script>
 }

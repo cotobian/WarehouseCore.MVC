@@ -20,6 +20,7 @@ namespace WarehouseCore.MVC.Models
         public int Status { get; set; }
         public string POSO { get; set; }
         public string Unit { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
         public string Shipment { get; set; }
         public string PositionName { get; set; }
         public string StatusText { get; set; }

@@ -27,15 +27,15 @@ namespace WarehouseCore.MVC.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<Function> Functions { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Pallet> Pallets { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Image> Images { get; set; }
-        public virtual DbSet<Booking> Bookings { get; set; }
     
         public virtual ObjectResult<Nullable<int>> Admin_CheckUserLogin(string username, string password)
         {
@@ -70,9 +70,23 @@ namespace WarehouseCore.MVC.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllBooking_Result>("WH_GetAllBooking");
         }
     
-        public virtual ObjectResult<string> WH_GetAllOutboundJob()
+        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("WH_GetAllOutboundJob");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob");
+        }
+    
+        public virtual int WH_GetAllOutboundJob()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WH_GetAllOutboundJob");
+        }
+    
+        public virtual int WH_GetCLPByBookingIds(string ids)
+        {
+            var idsParameter = ids != null ?
+                new ObjectParameter("ids", ids) :
+                new ObjectParameter("ids", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WH_GetCLPByBookingIds", idsParameter);
         }
     
         public virtual ObjectResult<WH_GetDeliveryJobByDate_Result> WH_GetDeliveryJobByDate(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
@@ -97,16 +111,6 @@ namespace WarehouseCore.MVC.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetInboundJobByBooking_Result>("WH_GetInboundJobByBooking", bookingidParameter);
         }
     
-        public virtual int WH_GetStockPosition()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WH_GetStockPosition");
-        }
-    
-        public virtual ObjectResult<WH_StackByConsignee_Result> WH_StackByConsignee()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_StackByConsignee_Result>("WH_StackByConsignee");
-        }
-    
         public virtual ObjectResult<WH_GetPalletByBooking_Result> WH_GetPalletByBooking(Nullable<int> bookingid)
         {
             var bookingidParameter = bookingid.HasValue ?
@@ -116,19 +120,14 @@ namespace WarehouseCore.MVC.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetPalletByBooking_Result>("WH_GetPalletByBooking", bookingidParameter);
         }
     
-        public virtual ObjectResult<WH_GetAllJob_Result> WH_GetAllJob()
+        public virtual ObjectResult<WH_GetStockPosition_Result> WH_GetStockPosition()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllJob_Result>("WH_GetAllJob");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetStockPosition_Result>("WH_GetStockPosition");
         }
     
-        public virtual ObjectResult<WH_GetAllBooking_Result> WH_GetAllBooking1()
+        public virtual ObjectResult<WH_StackByConsignee_Result> WH_StackByConsignee()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllBooking_Result>("WH_GetAllBooking1");
-        }
-    
-        public virtual ObjectResult<WH_GetAllBooking_Result> WH_GetAllBooking2()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_GetAllBooking_Result>("WH_GetAllBooking2");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WH_StackByConsignee_Result>("WH_StackByConsignee");
         }
     }
 }

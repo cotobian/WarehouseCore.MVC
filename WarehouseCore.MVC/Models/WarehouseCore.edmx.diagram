@@ -4,16 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f6d7d9d5c15f4b748f9c99c50bbdc81a" Name="Diagram1" ZoomLevel="99">
-        <EntityTypeShape EntityType="WarehouseModel.Function" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="WarehouseModel.Job" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="WarehouseModel.Pallet" Width="1.5" PointX="2.75" PointY="4.75" />
-        <EntityTypeShape EntityType="WarehouseModel.Permission" Width="1.5" PointX="4.75" PointY="4.75" />
-        <EntityTypeShape EntityType="WarehouseModel.Position" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="WarehouseModel.Role" Width="1.5" PointX="6.75" PointY="3.75" />
-        <EntityTypeShape EntityType="WarehouseModel.User" Width="1.5" PointX="6.75" PointY="6.75" />
-        <EntityTypeShape EntityType="WarehouseModel.Image" Width="1.5" PointX="0.75" PointY="8.75" />
-        <EntityTypeShape EntityType="WarehouseModel.Booking" Width="1.5" PointX="3.375" PointY="8.75" />
+      <Diagram DiagramId="1d1fdc8b2dea4492b7343669260c464c" Name="Diagram1" ZoomLevel="94">
+        <EntityTypeShape EntityType="WarehouseModel.Booking" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WarehouseModel.Function" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WarehouseModel.Image" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WarehouseModel.Job" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WarehouseModel.Pallet" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WarehouseModel.Permission" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WarehouseModel.Position" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WarehouseModel.Role" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WarehouseModel.User" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

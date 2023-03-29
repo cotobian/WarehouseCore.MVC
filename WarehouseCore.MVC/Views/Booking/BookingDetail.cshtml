@@ -222,26 +222,6 @@
                 });
         }
 
-        //hàm tạo popup image
-        //function PopupImage(data) {
-        //    var formDiv = $('<div />');
-        //    var url = '/Pallet/PalletImages';
-        //    $.get(url)
-        //        .done(function (response) {
-        //            formDiv.html(response);
-        //            Popup = formDiv.dialog({
-        //                autoOpen: true,
-        //                resizeable: false,
-        //                title: 'Ảnh Pallet',
-        //                height: 420,
-        //                width: 600,
-        //                close: function () {
-        //                    Popup.dialog('destroy').remove();
-        //                }
-        //            });
-        //        });
-        //}
-
         function PopupImage(data) {
             var formDiv = $('<div />');
             var url = '/Pallet/PalletImages?palletid=' + data;

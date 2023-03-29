@@ -60,7 +60,6 @@ namespace WarehouseCore.MVC.Controllers
         public async Task<ActionResult> PrintPalletSheet(int id)
         {
             string templatePath = Server.MapPath("~/Forms/PalletSheet.xlsx");
-            FileInfo file = new FileInfo(templatePath);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (var package = new ExcelPackage(templatePath))
@@ -136,12 +135,6 @@ namespace WarehouseCore.MVC.Controllers
             {
                 return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
-        }
-
-        [HttpGet]
-        public ActionResult PalletImage()
-        {
-            return View();
         }
 
         [HttpGet]

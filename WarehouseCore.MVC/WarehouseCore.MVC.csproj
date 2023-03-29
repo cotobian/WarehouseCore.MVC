@@ -284,11 +284,15 @@
     <Compile Include="Models\WH_GetPalletByBooking_Result.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\WH_GetStockPosition_Result.cs">
+      <DependentUpon>WarehouseCore.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\WH_StackByConsignee_Result.cs">
       <DependentUpon>WarehouseCore.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ChangePasswordVm.cs" />
+    <Compile Include="ViewModels\CLPVm.cs" />
     <Compile Include="ViewModels\InventoryVm.cs" />
     <Compile Include="ViewModels\JobVm.cs" />
     <Compile Include="ViewModels\LoginVm.cs" />
@@ -2227,6 +2231,7 @@
     <Content Include="Forms\PalletSheet.xlsx" />
     <Content Include="Forms\PNK.xlsx" />
     <Content Include="Forms\Position.xlsx" />
+    <Content Include="Forms\CLP.xlsx" />
     <EntityDeploy Include="Models\WarehouseCore.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>WarehouseCore.Designer.cs</LastGenOutput>
@@ -2283,7 +2288,6 @@
     <Content Include="Views\Booking\BookingDetail.cshtml" />
     <Content Include="Views\Pallet\Index.cshtml" />
     <Content Include="Views\Pallet\AddOrEdit.cshtml" />
-    <Content Include="Views\Pallet\PalletImage.cshtml" />
     <Content Include="Views\Pallet\PalletImages.cshtml" />
   </ItemGroup>
   <ItemGroup>

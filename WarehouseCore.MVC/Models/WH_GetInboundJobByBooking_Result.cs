@@ -15,12 +15,8 @@ namespace WarehouseCore.MVC.Models
     {
         public int Id { get; set; }
         public Nullable<int> JobType { get; set; }
-        public Nullable<int> BookingId { get; set; }
+        public Nullable<int> PalletId { get; set; }
         public Nullable<int> PositionId { get; set; }
-        public string POSO { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public string Unit { get; set; }
-        public Nullable<int> InboundJobId { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateCompleted { get; set; }
         public Nullable<int> UserCreated { get; set; }
